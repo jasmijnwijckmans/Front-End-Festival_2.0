@@ -76,6 +76,7 @@ function GetStages() {
         .then(function (returndata) {
             console.log(returndata);
             // if loading is correct, a card with data will be provided
+            $("#myStages").empty();
             if (returndata.success) {
                 var row = "";
                 returndata.data.forEach(function (stage) {
@@ -125,6 +126,7 @@ function DeleteStage(stageID) {
             .then(json => {
                 console.log(json);
                 if (json.success) {
+                
                     GetStages();
 
                 } else {
