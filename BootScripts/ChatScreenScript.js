@@ -1,8 +1,6 @@
 // Open a new websocket
 var webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
 
-var AuthKey = localStorage.getItem('AuthenticationKey');
-
 // Manually open a new websocket
 function OpenSocket() {
     webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
@@ -239,6 +237,7 @@ function SendMessage() {
         userID: localStorage.getItem("UserID"),
     };
     // Send the object as a string through the websocket
+    //console.log(JSON.stringify(msg))
     webSocket.send(JSON.stringify(msg));
     // Handle the message to post it on the screen
     document.getElementById("NewMessageBtn").disabled = true;
@@ -304,3 +303,107 @@ function LoadPage() {
   
 
 }
+
+// open a new stagesocket
+var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/wsm");
+
+
+// OnOpen change a field in the html page to indicate that the socket is open
+stageSocket.onopen = function () {
+    //Send the authentication key in a JSON object as the first message
+    var msg = {
+         AuthKey: localStorage.getItem('AuthenticationKey'),
+         StageID:  localStorage.getItem("current-StageID")
+    }
+   // console.log(JSON.stringify(msg))
+   stageSocket.send(JSON.stringify(msg));
+}
+
+function SelectSong(TrackID, MusicListID) {
+    // Create an object with the required parameters
+    var msg = {
+        TrackID: TrackID,
+        MusicListID: MusicListID,
+
+    };
+    // Send the object as a string through the websocket
+    stageSocket.send(JSON.stringify(msg));
+}
+
+stageSocket.onmessage = function (event) {
+    try{
+    var socketmessage = JSON.parse(event.data);
+    console.log(socketmessage)
+        if( socketmessage.succes){
+            console.log(socketmessage.Data)
+            $("#tracklists").empty();
+            socketmessage.Data.forEach(function(musiclist){
+                musiclist 
+                var List = document.createElement("div");
+                List.id = musiclist.ID;
+                $("#tracklists").append(List)
+                var nameList = document.createElement("p");
+                nameList.innerHTML = musiclist.Name;
+                nameList.className = "font-weight-bold";
+                $("#"+ musiclist.ID).append(nameList)
+                musiclist.PlaylistTrack.forEach(function(track){
+                    var divTrack = document.createElement("div");
+                    divTrack.id = track.id;
+                    $("#"+ musiclist.ID).append(divTrack);
+
+                    var name = document.createElement("div");
+                    name.className = "font-weight-bold";
+                    name.innerHTML = track.TrackName;
+
+                    var source = document.createElement("div");
+                    source.className = "font-weight-light";
+                    source.innerHTML = track.TrackSource;
+
+                    var length = document.createElement("div");
+                    length.className = "font-weight-light";
+                    length.innerHTML = track.Length;
+
+                    $("#"+ track.id).append(name);
+                    $("#"+ track.id).append(source);
+                    $("#"+ track.id).append(source);
+
+                    divTrack.className = "cursor-pointer"
+                    $("#"+ track.id).onclick() = SelectSong(divTrack.innerHTML, List.innerHTML)
+
+                });
+
+            });
+
+            var currentTrackName = document.createElement("div");      
+            var currentTrackSource = document.createElement("div");
+            currentTrackName.innerHTML =  socketmessage.Data.TrackName;
+            currentTrackSource.innerHTML =  socketmessage.Data.TrackSource
+
+            $("#song").empty();
+            $("#song").append("This song is currently playing:"+ currentTrackName);
+            
+
+        }
+        else{
+           
+            alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())  
+        }
+    }
+    catch {
+        console.log(event.data);
+    }
+
+
+
+
+}
+let currentSong;
+//var url = "https://www.dropbox.com/s/6zlbl8992jrztv0/bensound-betterdays.mp3?dl=0%27"
+function PlaySound(url){
+    currentSong = new Audio(url);
+    currentSong.play();
+}
+function StopSound(){
+    currentSong.pause();
+}
+

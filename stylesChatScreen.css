@@ -26,3 +26,6 @@
     text-align: right;
     color: lightslategrey;
   }
+  .cursor-pointer{
+    cursor: pointer;
+  }
