@@ -8,7 +8,7 @@ const baseurl = "https://festivalapplication20211001092547.azurewebsites.net";
 
 function GoToHome() {
 
-    window.location.href = 'index.html';
+    window.location.href = 'Index.html';
 }
 
 function GoToLogin() {

@@ -20,49 +20,58 @@ webSocket.onopen = function () {
 // Listen for incoming messages
 webSocket.onmessage = function (event) {
     // Convert the incoming message
-    // try {
-    var socketmessage = JSON.parse(event.data);
-    // Check what type of message you are receiving
-    switch (socketmessage.MessageType) {
-        case "IncomingMessage":
-            // In case of an incoming message, add the message to the screen
-            DisplayNewMessage(socketmessage.Message, false);
-            break;
-        case "InteractionUpdate":
-            // In case of an update of the interactions, process the interaction counts into the page
-            DisplayUpdateInteraction(socketmessage.Message);
-            break;
-        case "MessageResponse":
-            if (socketmessage.Message.Success) {
-                // In case of a response for a posted message, add the message if successful
-                DisplayNewMessage(socketmessage.Message.Data, true);
-                document.getElementById("NewMessageBtn").disabled = false;
-                document.getElementById("MessageSending").hidden = true;
-            } else {
-                // In case of a response for a posted message, show an alert if unsuccessful
-                alert("Failed to post message, error code(s): " + socketmessage.Message.ErrorMessage.toString())
-                document.getElementById("NewMessageBtn").disabled = false;
-                document.getElementById("MessageSending").hidden = true;
-            }
-            break;
-        case "InteractionResponse":
-            if (socketmessage.Message.Success) {
-                DisplayNewInteraction(socketmessage.Message.Data);
+    try {
+        var socketmessage = JSON.parse(event.data);
+        // Check what type of message you are receiving
+        switch (socketmessage.MessageType) {
+            case "IncomingMessage":
+                // In case of an incoming message, add the message to the screen
+                DisplayNewMessage(socketmessage.Message, false);
+                break;
+            case "InteractionUpdate":
+                // In case of an update of the interactions, process the interaction counts into the page
+                DisplayUpdateInteraction(socketmessage.Message);
+                break;
+            case "DeletedMessage":
+                DisplayDeletedMessage(socketmessage.Message);
 
-            } else {
-                alers("Failed to post interaction, error code(s): " + socketmessage.Message.ErrorMessage.toString())
-            }
-            break;
-        default:
+      
+                break;
+            case "MessageResponse":
+                if (socketmessage.Message.Success) {
+                    // In case of a response for a posted message, add the message if successful
+                    DisplayNewMessage(socketmessage.Message.Data, true);
+                    document.getElementById("NewMessageBtn").disabled = false;
+                    document.getElementById("MessageSending").hidden = true;
+                } else {
+                    // In case of a response for a posted message, show an alert if unsuccessful
+                    alert("Failed to post message, error code(s): " + socketmessage.Message.ErrorMessage.toString())
+                    document.getElementById("NewMessageBtn").disabled = false;
+                    document.getElementById("MessageSending").hidden = true;
+                }
+                break;
+            case "InteractionResponse":
+                if (socketmessage.Message.Success) {
+                    DisplayNewInteraction(socketmessage.Message.Data);
 
-            break;
+                } else {
+                    alert("Failed to post interaction, error code(s): " + socketmessage.Message.ErrorMessage.toString())
+                }
+                break;
+        
+            default:
+
+                break;
+
+        }
     }
-    // } catch {
-    //     if (event.data == "Authorization passed, connection now open") {
-    //         document.getElementById("socketstatus").innerHTML = "DEBUG: SOCKET OPEN";
-    //     }
-    //     console.log(event.data);
-    // }
+    catch {
+        if (event.data == "Authorization passed, connection now open") {
+            document.getElementById("socketstatus").innerHTML = "DEBUG: SOCKET OPEN";
+        }
+        console.log(event.data);
+    }
+
 }
 
 function DisplayNewMessage(Message, OwnMessage) {
@@ -75,6 +84,7 @@ function DisplayNewMessage(Message, OwnMessage) {
     var pTime = document.createElement("p");
 
     var icon = document.createElement("div");
+    var remove = document.createElement("div");
     var like = document.createElement("div");
     var dislike = document.createElement("div");
     var likecount = document.createElement("div");
@@ -85,6 +95,8 @@ function DisplayNewMessage(Message, OwnMessage) {
     dislikecount.id = Message.MessageID + "-" + 2;
     likecount.classList.add("interactions");
     dislikecount.classList.add("interactions");
+
+
 
     divText.className = "font-weight-light";
     divName.className = "font-weight-bold";
@@ -107,7 +119,7 @@ function DisplayNewMessage(Message, OwnMessage) {
         $(".chatbox").append(div);
         $("#" + Message.MessageID).append(divText);
         $("#" + Message.MessageID).append(pTime);
-        
+
         $("#" + Message.MessageID).append(like);
         $("#" + Message.MessageID).append(dislike);
 
@@ -125,7 +137,9 @@ function DisplayNewMessage(Message, OwnMessage) {
 
 
 
+
     } else {
+
         div.className = "text-left";
         like.innerHTML = `<button  style="margin:5px" class = "btn" id = "like" onclick="InteractWithMessage(${Message.MessageID}, 1)"> Like <i class="bi bi-hand-thumbs-up"></i></button>`
         dislike.innerHTML = `<button style="margin:5px" class = "btn" id = "dislike" onclick="InteractWithMessage(${Message.MessageID}, 2)"> Dislike <i class="bi bi-hand-thumbs-down"></i></button>`
@@ -139,18 +153,26 @@ function DisplayNewMessage(Message, OwnMessage) {
         $("#" + Message.MessageID + "_" + 1).append(likecount);
         $("#" + Message.MessageID + "_" + 2).append(dislikecount);
 
-        $("#" + Message.MessageID).append();
         $("#" + Message.MessageID).append(pTime);
 
         if (Message.UserRole == "admin") {
+
             icon.className = "bi bi-person-circle";
             $("#" + Message.MessageID).prepend(icon);
+
+
+
         } else if (Message.UserRole == "artist") {
             icon.className = "bi bi-disc"
             $("#" + Message.MessageID).prepend(icon);
         }
 
     }
+    if (localStorage.getItem("UserRole") == "admin") {
+        remove.innerHTML = `<button  style="margin:5px" class = "btn" id = "delete" onclick="DeleteMessage(${Message.MessageID})"> Delete <i class=""></i></button>`
+        $("#" + Message.MessageID).append(remove);
+    }
+    
 }
 
 function DisplayNewInteraction(Interaction) {
@@ -185,14 +207,14 @@ function DisplayNewInteraction(Interaction) {
 
 function DisplayUpdateInteraction(Interaction) {
     var divs = document.getElementsByClassName("interactions");
-    console.log(divs);
+    //console.log(divs);
     for (var i = 0; i < divs.length; i++) {
         divs[i].innerHTML = "";
     }
 
     Interaction.forEach(function (Message) {
-        Message.Interactions.forEach(function (ints){
-            if(ints.InteractionType == 1){
+        Message.Interactions.forEach(function (ints) {
+            if (ints.InteractionType == 1) {
                 let likes = ints.Count + " Like(s)";
                 $("#" + Message.MessageID + "-" + 1).empty().append(likes)
             } else {
@@ -201,6 +223,10 @@ function DisplayUpdateInteraction(Interaction) {
             }
         })
     });
+}
+
+function DisplayDeletedMessage(MessageID){
+    $("#" +MessageID).remove()
 }
 
 
@@ -234,6 +260,30 @@ function InteractWithMessage(MessageID, InteractionType) {
 
 }
 
+function DeleteMessage(MessageID) {
+    fetch(baseurl + "/api/Messages/"+MessageID, {
+        method: "delete",
+        headers: {
+            "Authorization": localStorage.getItem('AuthenticationKey')
+        }
+    })
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            if (json.success) {
+                $("#" +MessageID).remove()
+               
+
+            } else {
+                ProcessErrors(json.ErrorMessageS)
+            
+            }
+        })
+        .catch(error => {
+        });
+ 
+}
+
 // Close the websocket
 function Close() {
     webSocket.send("Closing connection");
@@ -251,5 +301,6 @@ function LoadPage() {
         $("#chat").removeClass("col-sm-9").addClass("col-sm-12")
         $("#DjBooth").hide();
     }
+  
 
 }
