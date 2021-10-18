@@ -398,14 +398,14 @@ stageSocket.onmessage = function (event) {
 
         });
 
-        var currentTrackName = document.createElement("div");
-        var currentTrackSource = document.createElement("div");
+        var currentTrackName = document.createElement("p");
+        var currentTrackSource = document.createElement("p");
         currentTrackName.innerHTML = socketmessage.Data.TrackName;
         currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
         // PlaySound(socketmessage.Data.TrackSource);
 
         $("#song").empty();
-        $("#song").append("This song is currently playing:" + currentTrackName);
+        $("#song").append("This song is currently playing: " + currentTrackName);
 
 
     } else {

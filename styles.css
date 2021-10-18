@@ -112,3 +112,7 @@ body {
   .slider.round:before {
     border-radius: 50%;
   }
+
+  .cursor-pointer{
+    cursor: pointer;
+  }
