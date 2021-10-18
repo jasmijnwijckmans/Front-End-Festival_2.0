@@ -338,7 +338,7 @@ stageSocket.onmessage = function (event) {
             console.log(socketmessage.Data)
             $("#tracklists").empty();
             socketmessage.Data.forEach(function(musiclist){
-                musiclist 
+                console.log(musiclist) 
                 var List = document.createElement("div");
                 List.id = musiclist.ID;
                 $("#tracklists").append(List)
