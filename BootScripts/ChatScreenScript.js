@@ -323,36 +323,43 @@ function SelectSong(TrackID, MusicListID) {
     // Create an object with the required parameters
     var msg = {
         TrackID: TrackID,
-        MusicListID: MusicListID,
+        PlaylistID: MusicListID,
+        //StageID: localStorage.getItem("current-StageID")
 
     };
+    console.log(msg)
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
 }
 
 stageSocket.onmessage = function (event) {
-    try{
+    //try{
     var socketmessage = JSON.parse(event.data);
-    console.log(socketmessage)
-        if( socketmessage.succes){
-            console.log(socketmessage.Data)
+    //console.log(socketmessage.Success)
+        if( socketmessage.Success){
+            console.log(socketmessage)
             $("#tracklists").empty();
             socketmessage.Data.forEach(function(musiclist){
                 console.log(musiclist) 
                 var List = document.createElement("div");
                 List.id = musiclist.ID;
                 $("#tracklists").append(List)
+               // $('#'+musiclist.ID).dropdown()
                 var nameList = document.createElement("p");
                 nameList.innerHTML = musiclist.Name;
                 nameList.className = "font-weight-bold";
                 $("#"+ musiclist.ID).append(nameList)
-                musiclist.PlaylistTrack.forEach(function(track){
-                    var divTrack = document.createElement("div");
-                    divTrack.id = track.id;
-                    $("#"+ musiclist.ID).append(divTrack);
+                musiclist.PlaylistTracks.forEach(function(track){
+                   console.log(track)
+                 
+                    var divTrack = document.createElement("p");
+                    divTrack.id = track.Id;
+                   
+                   // $("#"+ musiclist.ID).append(divTrack);
 
                     var name = document.createElement("div");
                     name.className = "font-weight-bold";
+                    name.classList.add("cursor-pointer")
                     name.innerHTML = track.TrackName;
 
                     var source = document.createElement("div");
@@ -363,12 +370,11 @@ stageSocket.onmessage = function (event) {
                     length.className = "font-weight-light";
                     length.innerHTML = track.Length;
 
-                    $("#"+ track.id).append(name);
-                    $("#"+ track.id).append(source);
-                    $("#"+ track.id).append(source);
-
-                    divTrack.className = "cursor-pointer"
-                    $("#"+ track.id).onclick() = SelectSong(divTrack.innerHTML, List.innerHTML)
+                    $("#"+musiclist.ID).append(name);
+                    name.onclick = function() {PlaySound(track.TrackSource)}
+                    //name.onclick = function() {SelectSong(track.Id, musiclist.ID)}
+                    $("#"+ musiclist.ID).append(source);
+                    $("#"+ musiclist.ID).append(length);
 
                 });
 
@@ -377,7 +383,8 @@ stageSocket.onmessage = function (event) {
             var currentTrackName = document.createElement("div");      
             var currentTrackSource = document.createElement("div");
             currentTrackName.innerHTML =  socketmessage.Data.TrackName;
-            currentTrackSource.innerHTML =  socketmessage.Data.TrackSource
+            currentTrackSource.innerHTML =  socketmessage.Data.TrackSource;
+           // PlaySound(socketmessage.Data.TrackSource);
 
             $("#song").empty();
             $("#song").append("This song is currently playing:"+ currentTrackName);
@@ -387,23 +394,35 @@ stageSocket.onmessage = function (event) {
         else{
            
             alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())  
+            console.log(socketmessage)
         }
-    }
-    catch {
-        console.log(event.data);
-    }
+    // }
+    // catch {
+    //     console.log(event.data);
+    // }
 
 
 
 
 }
 let currentSong;
-//var url = "https://www.dropbox.com/s/6zlbl8992jrztv0/bensound-betterdays.mp3?dl=0%27"
+
 function PlaySound(url){
+    console.log(currentSong)
+    if(currentSong == null){
     currentSong = new Audio(url);
     currentSong.play();
+    }
+    else{
+    currentSong.pause();
+    currentSong = new Audio(url);
+    currentSong.play();
+    }
 }
 function StopSound(){
     currentSong.pause();
+}
+function ResumeSound(){
+    currentSong.play();
 }
 
