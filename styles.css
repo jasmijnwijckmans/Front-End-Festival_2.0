@@ -46,6 +46,9 @@ body {
   .btn:hover {
     background-color: plum;
   }
+  .mooi:hover {
+    background-color: plum;
+  }
 
   /* The switch - the box around the slider */
 .switch {

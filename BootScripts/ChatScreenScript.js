@@ -33,7 +33,7 @@ webSocket.onmessage = function (event) {
             case "DeletedMessage":
                 DisplayDeletedMessage(socketmessage.Message);
 
-      
+
                 break;
             case "MessageResponse":
                 if (socketmessage.Message.Success) {
@@ -56,14 +56,13 @@ webSocket.onmessage = function (event) {
                     alert("Failed to post interaction, error code(s): " + socketmessage.Message.ErrorMessage.toString())
                 }
                 break;
-        
+
             default:
 
                 break;
 
         }
-    }
-    catch {
+    } catch {
         if (event.data == "Authorization passed, connection now open") {
             document.getElementById("socketstatus").innerHTML = "DEBUG: SOCKET OPEN";
         }
@@ -170,7 +169,7 @@ function DisplayNewMessage(Message, OwnMessage) {
         remove.innerHTML = `<button  style="margin:5px" class = "btn" id = "delete" onclick="DeleteMessage(${Message.MessageID})"> Delete <i class=""></i></button>`
         $("#" + Message.MessageID).append(remove);
     }
-    
+
 }
 
 function DisplayNewInteraction(Interaction) {
@@ -223,8 +222,8 @@ function DisplayUpdateInteraction(Interaction) {
     });
 }
 
-function DisplayDeletedMessage(MessageID){
-    $("#" +MessageID).remove()
+function DisplayDeletedMessage(MessageID) {
+    $("#" + MessageID).remove()
 }
 
 
@@ -260,27 +259,26 @@ function InteractWithMessage(MessageID, InteractionType) {
 }
 
 function DeleteMessage(MessageID) {
-    fetch(baseurl + "/api/Messages/"+MessageID, {
-        method: "delete",
-        headers: {
-            "Authorization": localStorage.getItem('AuthenticationKey')
-        }
-    })
+    fetch(baseurl + "/api/Messages/" + MessageID, {
+            method: "delete",
+            headers: {
+                "Authorization": localStorage.getItem('AuthenticationKey')
+            }
+        })
         .then(response => response.json())
         .then(json => {
             console.log(json);
             if (json.success) {
-                $("#" +MessageID).remove()
-               
+                $("#" + MessageID).remove()
+
 
             } else {
                 ProcessErrors(json.ErrorMessageS)
-            
+
             }
         })
-        .catch(error => {
-        });
- 
+        .catch(error => {});
+
 }
 
 // Close the websocket
@@ -297,10 +295,10 @@ function LoadPage() {
         //if user is an artist DJ booth appears on the page
         $("#DjBooth").show();
     } else {
-        $("#chat").removeClass("col-sm-9").addClass("col-sm-12")
+        $("#chat").removeClass("col-sm-8").addClass("col-sm-12")
         $("#DjBooth").hide();
     }
-  
+
 
 }
 
@@ -312,11 +310,11 @@ var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewe
 stageSocket.onopen = function () {
     //Send the authentication key in a JSON object as the first message
     var msg = {
-         AuthKey: localStorage.getItem('AuthenticationKey'),
-         StageID:  localStorage.getItem("current-StageID")
+        AuthKey: localStorage.getItem('AuthenticationKey'),
+        StageID: localStorage.getItem("current-StageID")
     }
-   // console.log(JSON.stringify(msg))
-   stageSocket.send(JSON.stringify(msg));
+    // console.log(JSON.stringify(msg))
+    stageSocket.send(JSON.stringify(msg));
 }
 
 function SelectSong(TrackID, MusicListID) {
@@ -336,66 +334,85 @@ stageSocket.onmessage = function (event) {
     //try{
     var socketmessage = JSON.parse(event.data);
     //console.log(socketmessage.Success)
-        if( socketmessage.Success){
-            console.log(socketmessage)
-            $("#tracklists").empty();
-            socketmessage.Data.forEach(function(musiclist){
-                console.log(musiclist) 
-                var List = document.createElement("div");
-                List.id = musiclist.ID;
-                $("#tracklists").append(List)
-               // $('#'+musiclist.ID).dropdown()
-                var nameList = document.createElement("p");
-                nameList.innerHTML = musiclist.Name;
-                nameList.className = "font-weight-bold";
-                $("#"+ musiclist.ID).append(nameList)
-                musiclist.PlaylistTracks.forEach(function(track){
-                   console.log(track)
-                 
-                    var divTrack = document.createElement("p");
-                    divTrack.id = track.Id;
-                   
-                   // $("#"+ musiclist.ID).append(divTrack);
+    if (socketmessage.Success) {
+        console.log(socketmessage)
+        $("#tracklists").empty();
+        socketmessage.Data.forEach(function (musiclist) {
+            console.log(musiclist)
+            var List = document.createElement("div");
+            List.id = musiclist.ID;
+            $("#tracklists").append(List)
+            List.className = "mt-2 col-md-12"
 
-                    var name = document.createElement("div");
-                    name.className = "font-weight-bold";
-                    name.classList.add("cursor-pointer")
-                    name.innerHTML = track.TrackName;
-
-                    var source = document.createElement("div");
-                    source.className = "font-weight-light";
-                    source.innerHTML = track.TrackSource;
-
-                    var length = document.createElement("div");
-                    length.className = "font-weight-light";
-                    length.innerHTML = track.Length;
-
-                    $("#"+musiclist.ID).append(name);
-                    name.onclick = function() {PlaySound(track.TrackSource)}
-                    //name.onclick = function() {SelectSong(track.Id, musiclist.ID)}
-                    $("#"+ musiclist.ID).append(source);
-                    $("#"+ musiclist.ID).append(length);
-
-                });
-
-            });
-
-            var currentTrackName = document.createElement("div");      
-            var currentTrackSource = document.createElement("div");
-            currentTrackName.innerHTML =  socketmessage.Data.TrackName;
-            currentTrackSource.innerHTML =  socketmessage.Data.TrackSource;
-           // PlaySound(socketmessage.Data.TrackSource);
-
-            $("#song").empty();
-            $("#song").append("This song is currently playing:"+ currentTrackName);
+            var nameList = document.createElement("button");
+            nameList.innerHTML = musiclist.Name;
+            nameList.className = "btn dropdown-toggle";
             
 
-        }
-        else{
-           
-            alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())  
-            console.log(socketmessage)
-        }
+            $("#" + musiclist.ID).append(nameList)
+            nameList.onclick = function () {
+
+                if (nameList.classList.contains('show')) {
+                    nameList.classList.remove('show')
+                    $("#" + musiclist.ID).empty();
+                    $("#" + musiclist.ID).append(nameList)
+
+                } else {
+
+                    musiclist.PlaylistTracks.forEach(function (track) {
+                        console.log(track)
+
+                        var divTrack = document.createElement("p");
+                        divTrack.id = track.Id;
+
+                        var name = document.createElement("div");
+                        name.className = "mooi dropdown-item";
+                        name.classList.add("cursor-pointer")
+                        name.innerHTML = track.TrackName;
+
+                        var source = document.createElement("div");
+                        source.className = "font-weight-light";
+                        source.innerHTML = track.TrackSource;
+
+                        var length = document.createElement("div");
+                        length.className = "font-weight-light";
+                        length.innerHTML = track.Length;
+
+                        $("#" + musiclist.ID).append(name);
+                        name.onclick = function () {
+                            PlaySound(track.TrackSource)
+                        }
+                        //name.onclick = function() {SelectSong(track.Id, musiclist.ID)}
+                        // $("#"+ musiclist.ID).append(source);
+                        // $("#"+ musiclist.ID).append(length);
+
+
+                    });
+                   
+                    nameList.classList.add('show')
+
+                }
+
+
+            }
+
+        });
+
+        var currentTrackName = document.createElement("div");
+        var currentTrackSource = document.createElement("div");
+        currentTrackName.innerHTML = socketmessage.Data.TrackName;
+        currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
+        // PlaySound(socketmessage.Data.TrackSource);
+
+        $("#song").empty();
+        $("#song").append("This song is currently playing:" + currentTrackName);
+
+
+    } else {
+
+        alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())
+        console.log(socketmessage)
+    }
     // }
     // catch {
     //     console.log(event.data);
@@ -407,22 +424,22 @@ stageSocket.onmessage = function (event) {
 }
 let currentSong;
 
-function PlaySound(url){
+function PlaySound(url) {
     console.log(currentSong)
-    if(currentSong == null){
-    currentSong = new Audio(url);
-    currentSong.play();
+    if (currentSong == null) {
+        currentSong = new Audio(url);
+        currentSong.play();
+    } else {
+        currentSong.pause();
+        currentSong = new Audio(url);
+        currentSong.play();
     }
-    else{
-    currentSong.pause();
-    currentSong = new Audio(url);
-    currentSong.play();
-    }
-}
-function StopSound(){
-    currentSong.pause();
-}
-function ResumeSound(){
-    currentSong.play();
 }
 
+function StopSound() {
+    currentSong.pause();
+}
+
+function ResumeSound() {
+    currentSong.play();
+}

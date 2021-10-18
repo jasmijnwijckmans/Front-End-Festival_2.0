@@ -29,3 +29,6 @@
   .cursor-pointer{
     cursor: pointer;
   }
+  .dropdown-toggle{
+    text-align:center;
+  }
