@@ -8,7 +8,7 @@ function NextImage() {
     }
     switch (ImageFes) {
         case 1:
-            document.getElementById("Image").src = "https://tse4.mm.bing.net/th/id/OIP.co7Q8cJicqhZWoOfCh7TqgHaEx?pid=ImgDet&rs=1";
+            document.getElementById("Image").src = "https://upload.wikimedia.org/wikipedia/commons/8/82/Tomorrowland-2017-2.jpg";
             break;
         case 2:
             document.getElementById("Image").src = "https://i.imgur.com/DBBlCi6.jpg";
