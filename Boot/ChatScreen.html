@@ -29,6 +29,15 @@
             <span id="stageName" class="navbar-text"></span>
         </ul>
         <ul class="nav navbar-nav">
+            <span id="UserName" class="nav-UserName" class="nav-link">
+
+                <script>
+                    var points = "50";
+                    var x = localStorage.getItem("UserName") + "(" + points + ")";
+                    document.getElementById("UserName").innerHTML = x
+                </script>
+
+        </span>
             <li class="nav-item"><a class="nav-link" onclick="Logout();"> Log out <i
                         class="bi bi-box-arrow-right"></i></a></li>
         </ul>

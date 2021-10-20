@@ -17,6 +17,10 @@
     color:lightgoldenrodyellow;
     padding:8px;
 }
+.nav-UserName{
+  color: lightgoldenrodyellow;
+  cursor:pointer;
+}
 
 body {
     font-family: "Trebuchet MS", Verdana, sans-serif;

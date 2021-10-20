@@ -1,5 +1,5 @@
-//Local API
-//1) const baseurl = "https://localhost:44372";
+//1)Local API
+//const baseurl = "http://localhost:44338";
 
 //2) Mock API
 const baseurl = "https://festivalapplication20211001092547.azurewebsites.net";
