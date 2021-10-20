@@ -310,17 +310,16 @@ var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewe
 stageSocket.onopen = function () {
     //Send the authentication key in a JSON object as the first message
     var msg = {
-        AuthKey: localStorage.getItem('AuthenticationKey'),
-        StageID: localStorage.getItem("current-StageID")
+        AuthKey: localStorage.getItem('AuthenticationKey')
+        //StageID: localStorage.getItem("current-StageID")
     }
-    // console.log(JSON.stringify(msg))
+    console.log(JSON.stringify(msg))
     stageSocket.send(JSON.stringify(msg));
 }
 
 function SelectSong(TrackID, MusicListID) {
     // Create an object with the required parameters
     var msg = {
-        StageCase: "ArtistSelection",
         TrackID: TrackID,
         PlaylistID: MusicListID,
         //StageID: localStorage.getItem("current-StageID")
@@ -331,125 +330,130 @@ function SelectSong(TrackID, MusicListID) {
     stageSocket.send(JSON.stringify(msg));
 }
 
-function GetMusicList(){
-    stageSocket.send();
-}
 
 stageSocket.onmessage = function (event) {
-    //try{
-    var socketmessage = JSON.parse(event.data);
-    //console.log(socketmessage.Success)
-    switch (socketmessage.StageCase) {
-        case "ArtistSelection":
-            var currentTrackName = document.createElement("p");
-            var currentTrackSource = document.createElement("p");
-            currentTrackName.innerHTML = socketmessage.Data.TrackName;
-            currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
-            PlaySound(socketmessage.Data.TrackSource);
+    //console.debug("WebSocket message received:", event);
+    //try {
+        console.log(event.data)
+        var socketmessage = JSON.parse(event.data);
+        console.log(socketmessage.StageCase)
+        switch (socketmessage.StageCase) {
+            case "ArtistSelection":
+                if (socketmessage.StageData.Success) {
+                    var currentTrackName = document.createElement("p");
+                    var currentTrackSource = document.createElement("p");
+                    currentTrackName.innerHTML = socketmessage.StageData.Data.TrackName;
+                    currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
+                    PlaySound(socketmessage.StageData.Data.TrackSource);
 
-            $("#song").empty();
-            $("#song").append("This song is currently playing: " + currentTrackName);
+                    $("#song").empty();
+                    $("#song").append("This song is currently playing: " + currentTrackName);
+                } else {
+                    alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    console.log(socketmessage)
+                }
 
-            break;
-        case "IncomingTrack":
-            // In case of an update of the interactions, process the interaction counts into the page
-            var currentTrackName = document.createElement("p");
-            var currentTrackSource = document.createElement("p");
-            currentTrackName.innerHTML = socketmessage.Data.TrackName;
-            currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
-            PlaySound(socketmessage.Data.TrackSource);
+                break;
+            case "IncomingTrack":
+                if (socketmessage.StageData.Success) {
+                    var currentTrackName = document.createElement("p");
+                    var currentTrackSource = document.createElement("p");
+                    currentTrackName.innerHTML = socketmessage.StageData.Data.TrackName;
+                    currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
+                    $("#song").empty();
+                    $("#song").append("This song is currently playing: " + currentTrackName);
+                } else {
+                    alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    console.log(socketmessage)
+                }
+                break;
+            case "ArtistGetList":
+                if (socketmessage.StageData.Success) {
+                    console.log(socketmessage)
+                    $("#tracklists").empty();
+                    socketmessage.StageData.Data.forEach(function (musiclist) {
+                        console.log(musiclist)
+                        var List = document.createElement("div");
+                        List.id = musiclist.ID;
+                        $("#tracklists").append(List)
+                        List.className = "mt-2 col-md-12"
 
-            $("#song").empty();
-            $("#song").append("This song is currently playing: " + currentTrackName);
-
-            break;
-        case "ArtistGetList":
-            if (socketmessage.Success) {
-                console.log(socketmessage)
-                $("#tracklists").empty();
-                socketmessage.Data.forEach(function (musiclist) {
-                    console.log(musiclist)
-                    var List = document.createElement("div");
-                    List.id = musiclist.ID;
-                    $("#tracklists").append(List)
-                    List.className = "mt-2 col-md-12"
-
-                    var nameList = document.createElement("button");
-                    nameList.innerHTML = musiclist.Name;
-                    nameList.className = "btn dropdown-toggle";
-
-
-                    $("#" + musiclist.ID).append(nameList)
-                    nameList.onclick = function () {
-
-                        if (nameList.classList.contains('show')) {
-                            nameList.classList.remove('show')
-                            $("#" + musiclist.ID).empty();
-                            $("#" + musiclist.ID).append(nameList)
-
-                        } else {
-
-                            musiclist.PlaylistTracks.forEach(function (track) {
-                                console.log(track)
-
-                                var divTrack = document.createElement("p");
-                                divTrack.id = track.Id;
-
-                                var name = document.createElement("div");
-                                name.className = "mooi dropdown-item";
-                                name.classList.add("cursor-pointer")
-                                name.innerHTML = track.TrackName;
-
-                                var source = document.createElement("div");
-                                source.className = "font-weight-light";
-                                source.innerHTML = track.TrackSource;
-
-                                var length = document.createElement("div");
-                                length.className = "font-weight-light";
-                                length.innerHTML = track.Length;
-
-                                $("#" + musiclist.ID).append(name);
-                                // name.onclick = function () {
-                                //     PlaySound(track.TrackSource)
-                                // }
-                                name.onclick = function () {
-                                    SelectSong(track.Id, musiclist.ID)
-                                }
-                                // $("#"+ musiclist.ID).append(source);
-                                // $("#"+ musiclist.ID).append(length);
+                        var nameList = document.createElement("button");
+                        nameList.innerHTML = musiclist.Name;
+                        nameList.className = "btn dropdown-toggle";
 
 
-                            });
+                        $("#" + musiclist.ID).append(nameList)
+                        nameList.onclick = function () {
 
-                            nameList.classList.add('show')
+                            if (nameList.classList.contains('show')) {
+                                nameList.classList.remove('show')
+                                $("#" + musiclist.ID).empty();
+                                $("#" + musiclist.ID).append(nameList)
+
+                            } else {
+
+                                musiclist.PlaylistTracks.forEach(function (track) {
+                                    console.log(track)
+
+                                    var divTrack = document.createElement("p");
+                                    divTrack.id = track.Id;
+
+                                    var name = document.createElement("div");
+                                    name.className = "mooi dropdown-item";
+                                    name.classList.add("cursor-pointer")
+                                    name.innerHTML = track.TrackName;
+
+                                    var source = document.createElement("div");
+                                    source.className = "font-weight-light";
+                                    source.innerHTML = track.TrackSource;
+
+                                    var length = document.createElement("div");
+                                    length.className = "font-weight-light";
+                                    length.innerHTML = track.Length;
+
+                                    $("#" + musiclist.ID).append(name);
+                                    // name.onclick = function () {
+                                    //     PlaySound(track.TrackSource)
+                                    // }
+                                    name.onclick = function () {
+                                        SelectSong(track.Id, musiclist.ID)
+                                    }
+                                    // $("#"+ musiclist.ID).append(source);
+                                    // $("#"+ musiclist.ID).append(length);
+
+
+                                });
+
+                                nameList.classList.add('show')
+
+                            }
+
 
                         }
 
-
-                    }
-
-                });
+                    });
 
 
-            } else {
+                } else {
 
-                alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())
-                console.log(socketmessage)
-            }
-            break ;
+                    alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    console.log(socketmessage)
+                }
+                break;
             default:
 
                 break;
 
-            // }
-            // catch {
-            //     console.log(event.data);
-            // }
-
-
-
-    }
+        }
+    // } catch {
+    //     if (event.data == "Authorization passed, connection now open") {
+    //         document.getElementById("socketstatus").innerHTML = "DEBUG: SOCKET OPEN";
+    //     }
+    //     console.log(event.data);
+    // }
 }
+
 
 
 let currentSong;
