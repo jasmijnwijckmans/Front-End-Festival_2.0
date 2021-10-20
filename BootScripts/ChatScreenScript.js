@@ -303,7 +303,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/wsm");
+var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -320,6 +320,7 @@ stageSocket.onopen = function () {
 function SelectSong(TrackID, MusicListID) {
     // Create an object with the required parameters
     var msg = {
+        StageCase: "ArtistSelection",
         TrackID: TrackID,
         PlaylistID: MusicListID,
         //StageID: localStorage.getItem("current-StageID")
@@ -330,98 +331,127 @@ function SelectSong(TrackID, MusicListID) {
     stageSocket.send(JSON.stringify(msg));
 }
 
+function GetMusicList(){
+    stageSocket.send();
+}
+
 stageSocket.onmessage = function (event) {
     //try{
     var socketmessage = JSON.parse(event.data);
     //console.log(socketmessage.Success)
-    if (socketmessage.Success) {
-        console.log(socketmessage)
-        $("#tracklists").empty();
-        socketmessage.Data.forEach(function (musiclist) {
-            console.log(musiclist)
-            var List = document.createElement("div");
-            List.id = musiclist.ID;
-            $("#tracklists").append(List)
-            List.className = "mt-2 col-md-12"
+    switch (socketmessage.StageCase) {
+        case "ArtistSelection":
+            var currentTrackName = document.createElement("p");
+            var currentTrackSource = document.createElement("p");
+            currentTrackName.innerHTML = socketmessage.Data.TrackName;
+            currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
+            PlaySound(socketmessage.Data.TrackSource);
 
-            var nameList = document.createElement("button");
-            nameList.innerHTML = musiclist.Name;
-            nameList.className = "btn dropdown-toggle";
-            
+            $("#song").empty();
+            $("#song").append("This song is currently playing: " + currentTrackName);
 
-            $("#" + musiclist.ID).append(nameList)
-            nameList.onclick = function () {
+            break;
+        case "IncomingTrack":
+            // In case of an update of the interactions, process the interaction counts into the page
+            var currentTrackName = document.createElement("p");
+            var currentTrackSource = document.createElement("p");
+            currentTrackName.innerHTML = socketmessage.Data.TrackName;
+            currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
+            PlaySound(socketmessage.Data.TrackSource);
 
-                if (nameList.classList.contains('show')) {
-                    nameList.classList.remove('show')
-                    $("#" + musiclist.ID).empty();
+            $("#song").empty();
+            $("#song").append("This song is currently playing: " + currentTrackName);
+
+            break;
+        case "ArtistGetList":
+            if (socketmessage.Success) {
+                console.log(socketmessage)
+                $("#tracklists").empty();
+                socketmessage.Data.forEach(function (musiclist) {
+                    console.log(musiclist)
+                    var List = document.createElement("div");
+                    List.id = musiclist.ID;
+                    $("#tracklists").append(List)
+                    List.className = "mt-2 col-md-12"
+
+                    var nameList = document.createElement("button");
+                    nameList.innerHTML = musiclist.Name;
+                    nameList.className = "btn dropdown-toggle";
+
+
                     $("#" + musiclist.ID).append(nameList)
+                    nameList.onclick = function () {
 
-                } else {
+                        if (nameList.classList.contains('show')) {
+                            nameList.classList.remove('show')
+                            $("#" + musiclist.ID).empty();
+                            $("#" + musiclist.ID).append(nameList)
 
-                    musiclist.PlaylistTracks.forEach(function (track) {
-                        console.log(track)
+                        } else {
 
-                        var divTrack = document.createElement("p");
-                        divTrack.id = track.Id;
+                            musiclist.PlaylistTracks.forEach(function (track) {
+                                console.log(track)
 
-                        var name = document.createElement("div");
-                        name.className = "mooi dropdown-item";
-                        name.classList.add("cursor-pointer")
-                        name.innerHTML = track.TrackName;
+                                var divTrack = document.createElement("p");
+                                divTrack.id = track.Id;
 
-                        var source = document.createElement("div");
-                        source.className = "font-weight-light";
-                        source.innerHTML = track.TrackSource;
+                                var name = document.createElement("div");
+                                name.className = "mooi dropdown-item";
+                                name.classList.add("cursor-pointer")
+                                name.innerHTML = track.TrackName;
 
-                        var length = document.createElement("div");
-                        length.className = "font-weight-light";
-                        length.innerHTML = track.Length;
+                                var source = document.createElement("div");
+                                source.className = "font-weight-light";
+                                source.innerHTML = track.TrackSource;
 
-                        $("#" + musiclist.ID).append(name);
-                        name.onclick = function () {
-                            PlaySound(track.TrackSource)
+                                var length = document.createElement("div");
+                                length.className = "font-weight-light";
+                                length.innerHTML = track.Length;
+
+                                $("#" + musiclist.ID).append(name);
+                                // name.onclick = function () {
+                                //     PlaySound(track.TrackSource)
+                                // }
+                                name.onclick = function () {
+                                    SelectSong(track.Id, musiclist.ID)
+                                }
+                                // $("#"+ musiclist.ID).append(source);
+                                // $("#"+ musiclist.ID).append(length);
+
+
+                            });
+
+                            nameList.classList.add('show')
+
                         }
-                        //name.onclick = function() {SelectSong(track.Id, musiclist.ID)}
-                        // $("#"+ musiclist.ID).append(source);
-                        // $("#"+ musiclist.ID).append(length);
 
 
-                    });
-                   
-                    nameList.classList.add('show')
+                    }
 
-                }
+                });
 
 
+            } else {
+
+                alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())
+                console.log(socketmessage)
             }
+            break ;
+            default:
 
-        });
+                break;
 
-        var currentTrackName = document.createElement("p");
-        var currentTrackSource = document.createElement("p");
-        currentTrackName.innerHTML = socketmessage.Data.TrackName;
-        currentTrackSource.innerHTML = socketmessage.Data.TrackSource;
-        // PlaySound(socketmessage.Data.TrackSource);
-
-        $("#song").empty();
-        $("#song").append("This song is currently playing: " + currentTrackName);
+            // }
+            // catch {
+            //     console.log(event.data);
+            // }
 
 
-    } else {
 
-        alert("Failed to load track list, error code(s): " + socketmessage.ErrorMessage.toString())
-        console.log(socketmessage)
     }
-    // }
-    // catch {
-    //     console.log(event.data);
-    // }
-
-
-
-
 }
+
+
 let currentSong;
 
 function PlaySound(url) {
