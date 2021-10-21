@@ -360,6 +360,7 @@ stageSocket.onmessage = function (event) {
                     var currentTrackSource = document.createElement("p");
                     currentTrackName.innerHTML = socketmessage.StageData.Data.TrackName;
                     currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
+                    PlaySound(socketmessage.StageData.Data.TrackSource);
                     $("#song").empty();
                     $("#song").append("This song is currently playing: " + currentTrackName);
                 } else {

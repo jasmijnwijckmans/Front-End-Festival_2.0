@@ -60,6 +60,9 @@ body {
 .btn:hover {
   background-color: plum;
 }
+.mooi{
+  color: lightgoldenrodyellow;
+}
 
 .mooi:hover {
   background-color: plum;
