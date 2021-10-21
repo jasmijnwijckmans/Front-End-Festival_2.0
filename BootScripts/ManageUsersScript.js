@@ -14,10 +14,11 @@ function GetUsers() {
                 var temp = "";
                 returndata.data.forEach(function (user) {
                     temp += "<tr>";
-
                     temp += "<td style = \" font-weight: bold\">" + user.userName + "</td>";
                     temp += "<td class = \"cursor-pointer\" style=\"font-weight: lighter\" onclick ='GetUserData(" + user.userID + ")'>" + user.userID + "</td>";
-                    temp += "<td style=\"font-weight: lighter\">" + user.userRole + "</td></tr>";
+                    temp += "<td style=\"font-weight: lighter\">" + user.userRole + "</td>";
+                    temp +="<td style=\"font-weight: lighter\"> <button type=\"button\" class=\"btn btn-primary btn-block btn-lg\" data-toggle=\"modal\" data-target=\"#myModal\"onclick='GetUserData(" + user.userID + ")'>Open Messages</button></td></tr>";
+
 
                 });
                 document.getElementById("myUsers").innerHTML += temp;
@@ -46,36 +47,23 @@ function GetUserData(userID) {
                 if (returndata.success) {
                     $("#userActivity").empty();
                     var temp = "";
+                    temp +="<tr>"
+                    temp +="<th style=\"width: 05%;\"> User Name</th>"
+                    temp +="<th style=\"width: 05%;\"> Stage ID</th>"
+                    temp +="<th style=\"width: 10%;\"> Message History</th>"
+                    temp +="<th style=\"width: 10%;\"> Message Text</th>"
+                    temp +="<th style=\"width: 10%;\"> Delete Message</th>"
+                    temp +="</tr>"
                     var userall = returndata.data
                     //console.log(userall.userRole)
                     userall.activities.forEach(function (useractivities) {
-                        temp += "<tr>";
-                        temp += "<td style = \" font-weight: bold\">" + userall.userName + "</td>";
-                        temp += "<td style = \" font-weight: bold\">" + useractivities.stageID + "</td>";
-                        temp += "<td style = \"font-weight: lighter\">" + new Date(useractivities.entry + "Z").toLocaleTimeString([], {
-                            year: 'numeric',
-                            month: 'numeric',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
-                        }); + ":" + "</td>";
-                        if (useractivities.exit == null) {
-                            temp += "<td style = \" font-weight: bold\">  The User is still in this stage </td>";
-                        } else(
-                            temp += "<td style = \"font-weight: lighter\">" + new Date(useractivities.exit + "Z").toLocaleTimeString([], {
-                                year: 'numeric',
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit'
-                            }) + ":" + "</td>"
-                        )
-                        //console.log(useractivities)
-                        useractivities.messageHistory.forEach(function (messages) {
+                         useractivities.messageHistory.forEach(function (messages) {
                             //console.log(messages)
                             //console.log(messages.messageText)
+
+                            temp += "<tr>";
+                            temp += "<td style = \" font-weight: bold\">" + userall.userName + "</td>";
+                            temp += "<td style = \" font-weight: bold\">" + useractivities.stageID + "</td>";
                             temp += "<td style= \" font-weight: lighter\">" + new Date(messages.timestamp + "Z").toLocaleTimeString([], {
                                 year: 'numeric',
                                 month: 'numeric',
@@ -85,7 +73,7 @@ function GetUserData(userID) {
                                 second: '2-digit'
                             }); + ":" + "</td>";
                             temp += "<td style= \" font-weight: lighter\">" + messages.messageText + "</td>";
-                            temp += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteMessage(" + messages.messageID + ")'> Delete</button></td></tr>";
+                            temp += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteMessage(" + messages.messageID +","+ userID +")'> Delete</button></td></tr>";
                         })
                     })
                     // temp += "<tr>";
@@ -100,8 +88,8 @@ function GetUserData(userID) {
     }
 }
 
-function DeleteMessage(MessageID) {
-    fetch(baseurl + "/api/User/" + MessageID, {
+function DeleteMessage(MessageID,UserID) {
+    fetch(baseurl + "/api/Messages/" + MessageID, {
             method: "delete",
             headers: {
                 "Authorization": localStorage.getItem('AuthenticationKey')
@@ -111,7 +99,7 @@ function DeleteMessage(MessageID) {
         .then(json => {
             console.log(json);
             if (json.success) {
-                GetUserData();
+                GetUserData(UserID);
 
 
             } else {
@@ -119,7 +107,7 @@ function DeleteMessage(MessageID) {
 
             }
         })
-        .catch(error => {});
+        .catch(error => {console.error("Error Deleting Message", error)});
 
 }
 
