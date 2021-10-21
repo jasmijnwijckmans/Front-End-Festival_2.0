@@ -303,7 +303,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket(websocketurl + "/stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
