@@ -1,0 +1,196 @@
+.navbar {
+  background-color: rgb(125, 0, 0);
+}
+
+.nav-link {
+  color: thistle;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: thistle;
+  background-color: rgb(100, 0, 0);
+}
+
+.navbar-text {
+  color: lightgoldenrodyellow;
+  font-weight: bold;
+}
+
+.footer-text {
+  color: lightgoldenrodyellow;
+  padding: 8px;
+}
+
+body {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  background-color: lightgoldenrodyellow;
+  line-height: 1.6;
+  letter-spacing: 1.5px;
+  font-size: 110%;
+  color: black;
+}
+
+.picture{
+
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/82/Tomorrowland-2017-2.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+
+}
+
+.card {
+
+  background-color: thistle;
+  line-height: 1.6;
+  letter-spacing: 1.5px;
+  font-size: 110%;
+
+}
+
+.btn {
+  background-color: rgb(125, 0, 0);
+  color: lightgoldenrodyellow;
+  border: thistle;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: plum;
+}
+
+.mooi:hover {
+  background-color: plum;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: thistle;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: rgb(125, 0, 0);
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px rgb(125, 0, 0);
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

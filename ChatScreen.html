@@ -19,7 +19,7 @@
     <script src="BootScripts/ChatSwitchScript.js"></script>
 </head>
 
-<body onload="LoadPage()" class="d-flex flex-column min-vh-100">
+<body onload="LoadPage()" class="d-flex flex-column min-vh-100 picture">
     <!-- page header -->
     <!-- navigation bar -->
     <nav class="navbar navbar-expand-sm fixed-top">
@@ -29,15 +29,6 @@
             <span id="stageName" class="navbar-text"></span>
         </ul>
         <ul class="nav navbar-nav">
-            <span id="UserName" class="nav-UserName" class="nav-link">
-
-                <script>
-                    var points = "50";
-                    var x = localStorage.getItem("UserName") + "(" + points + ")";
-                    document.getElementById("UserName").innerHTML = x
-                </script>
-
-        </span>
             <li class="nav-item"><a class="nav-link" onclick="Logout();"> Log out <i
                         class="bi bi-box-arrow-right"></i></a></li>
         </ul>
@@ -51,7 +42,7 @@
 
     
 
-            <div class="col-sm-9" id="chat">
+            <div class="col-sm-8" id="chat">
                 <!-- Chat Area -->
                 <div class="container">
                     <div class="row">
@@ -87,17 +78,32 @@
             
 
             <!-- Dj Booth from artist -->
-            <div class="col-sm-3" id="DjBooth">
+            <div class="col-sm-4" id="DjBooth">
 
 
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1 class="text-center font-weight-bold"> DJ Booth</h1>
+                            <h1 class="font-weight-bold" style = "color:lightgoldenrodyellow"> DJ Booth</h1>
                         </div>
-                        <button type="button" class="bi bi-skip-backward" onclick="SwitchSong()"> </button>
-                        <button type="button" class="bi bi-play" onclick="SwitchSong()"> </button>
-                        <button type="button" class="bi bi-skip-forward" onclick="SwitchSong()"> </button>
+                        <div id = "song">
+
+                        </div>
+                        <div class="col-sm-12">
+                        <button type="button" class=" btn bi bi-skip-backward" onclick="SwitchSong()"> </button>
+                        <button type="button" class="btn bi bi-play" onclick="ResumeSound()"> </button>
+                        <button type="button" class="btn bi bi-pause" onclick="StopSound()"> </button>
+                        <button type="button" class="btn bi bi-skip-forward" onclick="SwitchSong()"> </button>
+                        </div>
+
+                        <div id = "tracklists">
+
+                        </div>
+
+                       
+
+                        
+
 
                     </div>
                 </div>
@@ -106,18 +112,20 @@
         <div id = "interaction">
                
         </div>
+
+
     </div>
 
     <!-- foot bar -->
     <footer class="navbar navbar-expand-sm mt-auto">
-        <ul class="nav navbar-nav mr-auto">
+        <!-- <ul class="nav navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" onclick="OpenSocket();"> Open Socket  <i
                         class=""></i></a></li>
-        </ul>
-        <ul class="nav navbar-nav">
+        </ul> -->
+        <!-- <ul class="nav navbar-nav">
             <li class="nav-item"><a class="nav-link" onclick="Close();"> Close Socket<i
                         class=""></i></a></li>
-        </ul>
+        </ul> -->
     </footer>
 
 

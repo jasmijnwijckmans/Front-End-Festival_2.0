@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">  
-    <script src="Bootscripts/GeneralScript.js"></script>  
+    <script src="BootScripts/GeneralScript.js"></script>  
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -23,13 +23,13 @@
         </ul>
     </nav>
 
-   <div class="container-fluid" style="margin-top:100px;">
+   <div class="container-fluid" style="margin-top:130px;">
     <div class="row section">
             <div class="col-sm-12">
-                <label for="Username">Username:</label>
-                <input style="width: 100%;" type="text" id="Username">
-                <label for="Password">Password:</label>
-                <input style="width: 100%;" type="password" id="Password">
+                <label style = "color: lightgoldenrodyellow" for="Username">Username:</label>
+                <input style="width: 100%;" type="text" id="Username"placeholder="Username">
+                <label style = "color: lightgoldenrodyellow" for="Password">Password:</label>
+                <input style="width: 100%;" type="password" id="Password"placeholder="Password">
                 <p id="ErrorMessage"></p>
             </div>
         </div>
@@ -42,7 +42,7 @@
    
           <div class="row">
             <div class="col-sm-12">
-                <p>If you do not yet have an account register here:</p>
+                <p  style = "color: lightgoldenrodyellow">If you do not yet have an account register here:</p>
                 <a><button class="btn" value="Login" onclick="Register();">Register <i class="bi bi-person-plus"></i></button></a>
             </div>
         </div>
