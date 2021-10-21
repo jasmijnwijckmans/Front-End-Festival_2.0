@@ -1,5 +1,5 @@
 function GetPoints() {
-    fetch(baseurl + "/api/User/" + localStorage.getItem("UserID"), {
+    fetch(baseurl + "/api/Loyalty/" + localStorage.getItem("UserID"), {
             headers: {
                 "Authorization": localStorage.getItem('AuthenticationKey')
             }

@@ -149,3 +149,40 @@ function DeleteUser() {
             console.log("Failed to send request");
         });
 }
+function EditUser() {
+    //localStorage.setItem('UserRole', "admin") //deze lijn is tijdelijk om te laten werken
+    if (localStorage.getItem('UserRole') == "admin") {
+        var myEdit = {}
+        myEdit.userID = document.getElementById("userID").value
+        myEdit.userRole = document.getElementById("userRole").value
+
+        //var myEdit = "{\"UserID\": " + document.getElementById("userID").value+ ",\"UserRole\": \"+ document.getElementById("userRole").value + \" }";
+        console.log(myEdit);
+        fetch(baseurl + "/api/User", {
+                method: "put",
+                headers: {
+                    "Authorization": localStorage.getItem('AuthenticationKey'),
+                    "success": true,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(myEdit)
+            })
+            .then(response => response.json())
+            .then(json => {
+                console.log(json)
+                if (json.success) {
+                    console.log(json);
+                    GetUsers();
+                } else {
+                    ProcessErrors(json.errorMessage)
+                }
+            })
+            .catch(error => {
+                console.error("Error", error);
+            });
+
+    } else {
+        console.log(error)
+    }
+
+}
