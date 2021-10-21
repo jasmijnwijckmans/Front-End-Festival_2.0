@@ -7,7 +7,9 @@ const baseurl = "https://festivalapplication20211001092547.azurewebsites.net";
 //!!IMPORTANT!!: Use only API 1 or 2!
 
 function GoToHome() {
-
+    UpdateActivity(0);
+    DeleteAuthenticationKey();
+    localStorage.clear();
     window.location.href = 'Index.html';
 }
 
@@ -141,9 +143,8 @@ function UpdateActivity(StageID) {
 
 
 function Logout() {
-    DeleteAuthenticationKey();
-    localStorage.clear();
-    UpdateActivity(0);
+    //UpdateActivity(0);
+   
     GoToHome();
 
 }
