@@ -303,14 +303,14 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket(websocketurl + "/stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
 stageSocket.onopen = function () {
     //Send the authentication key in a JSON object as the first message
     var msg = {
-        AuthKey: localStorage.getItem('AuthenticationKey')
+        AuthenticationKey: localStorage.getItem('AuthenticationKey')
         //StageID: localStorage.getItem("current-StageID")
     }
     console.log(JSON.stringify(msg))

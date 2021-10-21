@@ -4,7 +4,6 @@
 //2) Mock API
 const baseurl = "https://festivalapplication20211001092547.azurewebsites.net";
 
-const websocketurl = "wss://festivalapplication20211001092547.azurewebsites.net/ws";
 
 //!!IMPORTANT!!: Use only API 1 or 2!
 
