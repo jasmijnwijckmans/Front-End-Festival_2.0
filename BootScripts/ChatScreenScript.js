@@ -347,7 +347,7 @@ stageSocket.onmessage = function (event) {
                     PlaySound(socketmessage.StageData.Data.TrackSource);
 
                     $("#song").empty();
-                    $("#song").append("This song is currently playing: " + currentTrackName);
+                    $("#song").append("This song is currently playing: " + currentTrackName.innerHTML);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
                     console.log(socketmessage)
@@ -362,7 +362,7 @@ stageSocket.onmessage = function (event) {
                     currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
                     PlaySound(socketmessage.StageData.Data.TrackSource);
                     $("#song").empty();
-                    $("#song").append("This song is currently playing: " + currentTrackName);
+                    $("#song").append("This song is currently playing: " + currentTrackName.innerHTML);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
                     console.log(socketmessage)
@@ -473,6 +473,8 @@ function PlaySound(url) {
 
 function StopSound() {
     currentSong.pause();
+    var timeaudio = currentSong.currentTime;
+    console.log(timeaudio);
 }
 
 function ResumeSound() {
