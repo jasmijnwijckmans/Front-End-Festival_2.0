@@ -458,22 +458,25 @@ stageSocket.onmessage = function (event) {
 
 
 let currentSong;
+let timeaudio=0;
 
 function PlaySound(url) {
     console.log(currentSong)
     if (currentSong == null) {
         currentSong = new Audio(url);
+        currentSong.currentTime=timeaudio;
         currentSong.play();
     } else {
         currentSong.pause();
         currentSong = new Audio(url);
+        currentSong.currentTime=timeaudio;
         currentSong.play();
     }
 }
 
 function StopSound() {
     currentSong.pause();
-    var timeaudio = currentSong.currentTime;
+    timeaudio = currentSong.currentTime;
     console.log(timeaudio);
 }
 
