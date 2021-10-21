@@ -10,6 +10,7 @@ function GetUsers() {
             console.log(returndata);
             // if loading is correct, a card with data will be provided
             if (returndata.success) {
+                $("#myUsers").empty();
                 var temp = "";
                 returndata.data.forEach(function (user) {
                     temp += "<tr>";
@@ -43,6 +44,7 @@ function GetUserData(userID) {
                 console.log(returndata);
                 // if loading is correct, a card with data will be provided
                 if (returndata.success) {
+                    $("#userActivity").empty();
                     var temp = "";
                     var userall = returndata.data
                     //console.log(userall.userRole)
@@ -81,8 +83,9 @@ function GetUserData(userID) {
                                 hour: '2-digit',
                                 minute: '2-digit',
                                 second: '2-digit'
-                            }); + ":" + "</td></tr>";
-                            temp += "<td style= \" font-weight: lighter\">" + messages.messageText + "</td></tr>";
+                            }); + ":" + "</td>";
+                            temp += "<td style= \" font-weight: lighter\">" + messages.messageText + "</td>";
+                            temp += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteMessage(" + messages.messageID + ")'> Delete</button></td></tr>";
                         })
                     })
                     // temp += "<tr>";
@@ -98,27 +101,26 @@ function GetUserData(userID) {
 }
 
 function DeleteMessage(MessageID) {
-    fetch(baseurl + "/api/User/"+MessageID, {
-        method: "delete",
-        headers: {
-            "Authorization": localStorage.getItem('AuthenticationKey')
-        }
-    })
+    fetch(baseurl + "/api/User/" + MessageID, {
+            method: "delete",
+            headers: {
+                "Authorization": localStorage.getItem('AuthenticationKey')
+            }
+        })
         .then(response => response.json())
         .then(json => {
             console.log(json);
             if (json.success) {
-                $("#" +MessageID).remove()
-               
+                GetUserData();
+
 
             } else {
                 ProcessErrors(json.ErrorMessageS)
-            
+
             }
         })
-        .catch(error => {
-        });
- 
+        .catch(error => {});
+
 }
 
 function DeleteUser() {
@@ -138,7 +140,7 @@ function DeleteUser() {
             if (json.success == false) {
                 ProcessErrors(json.errorMessage)
             } else {
-
+                GetUsers();
                 console.log(json);
                 onload
             }
