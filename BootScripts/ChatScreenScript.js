@@ -1,11 +1,7 @@
 
 
-//proef account azure
-const websocketurl="wss://festivalapplication20211001092547.azurewebsites.net/ws/";
-//local host
-//const websocketurl="ws://localhost:44338/ws/";
-//own private azure account
-//const websocketurl="wss://festivalbackend.azurewebsites.net/ws/";
+const websocketurl="ws://"+actualurl+"/ws/";
+
 
 var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 
@@ -333,7 +329,7 @@ function SelectSong(TrackID, MusicListID) {
         //StageID: localStorage.getItem("current-StageID")
 
     };
-    console.log(msg)
+    
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
     console.log(msg)
