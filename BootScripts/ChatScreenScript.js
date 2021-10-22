@@ -1,9 +1,17 @@
-// Open a new websocket
-var webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+
+
+//proef account azure
+const websocketurl="wss://festivalapplication20211001092547.azurewebsites.net/ws/";
+//local host
+//const websocketurl="ws://localhost:44338/ws/";
+//own private azure account
+//const websocketurl="wss://festivalbackend.azurewebsites.net/ws/";
+
+var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 
 // Manually open a new websocket
 function OpenSocket() {
-    webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+    webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 }
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -303,7 +311,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket(websocketurl+"stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -328,6 +336,7 @@ function SelectSong(TrackID, MusicListID) {
     console.log(msg)
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
+    console.log(msg)
 }
 
 
