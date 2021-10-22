@@ -1,13 +1,13 @@
 //1)Local URL
-const actualurl = "localhost:44338";
+//const actualurl = "localhost:44338";
 
 //2) Proefaccount URL
 //const actualurl = "festivalapplication20211001092547.azurewebsites.net";
 
 //3) Private Account URL
-//const actualurl = "festivalbackend.azurewebsites.net";
+const actualurl = "festivalbackend.azurewebsites.net";
 
-const baseurl = "http://"+actualurl;
+const baseurl = "https://"+actualurl;
 
 //!!IMPORTANT!!: Use only API 1,2 or 3!
 

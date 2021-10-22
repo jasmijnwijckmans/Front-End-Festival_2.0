@@ -1,7 +1,13 @@
 
-
-const websocketurl="ws://"+actualurl+"/ws/";
-
+let websocketurl;
+if(actualurl=="localhost:44338")
+{
+ websocketurl="ws://"+actualurl+"/ws/";
+}
+else
+{
+ websocketurl="wss://"+actualurl+"/ws/";
+}
 
 var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 
