@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="stylesChatScreen.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <script src="BootScripts/ChatScreenScript.js"></script>
     <script src="BootScripts/GeneralScript.js"></script>
+    <script src="BootScripts/ChatScreenScript.js"></script>
     <script src="BootScripts/ChatSwitchScript.js"></script>
 </head>
 
@@ -24,12 +24,12 @@
     <!-- navigation bar -->
     <nav class="navbar navbar-expand-sm fixed-top">
         <ul class="nav navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" onclick="UpdateActivity(0);"> Switch Menu <i
+            <li class="nav-item"><a class="nav-link" onclick="UpdateActivity(0)"> Switch Menu <i
                         class="bi bi-arrow-left"></i></a></li>
             <span id="stageName" class="navbar-text"></span>
         </ul>
         <ul class="nav navbar-nav">
-            <li class="nav-item"><a class="nav-link" onclick="Logout();"> Log out <i
+            <li class="nav-item"><a class="nav-link" onclick="UpdateActivityLogout(0)"> Log out <i
                         class="bi bi-box-arrow-right"></i></a></li>
         </ul>
     </nav>
@@ -90,10 +90,10 @@
 
                         </div>
                         <div class="col-sm-12">
-                        <button type="button" class=" btn bi bi-skip-backward" onclick="SwitchSong()"> </button>
+                        <!-- <button type="button" class=" btn bi bi-skip-backward" onclick="SwitchSong()"> </button> -->
                         <button type="button" class="btn bi bi-play" onclick="ResumeSound()"> </button>
                         <button type="button" class="btn bi bi-pause" onclick="StopSound()"> </button>
-                        <button type="button" class="btn bi bi-skip-forward" onclick="SwitchSong()"> </button>
+                        <!-- <button type="button" class="btn bi bi-skip-forward" onclick="SwitchSong()"> </button> -->
                         </div>
 
                         <div id = "tracklists">

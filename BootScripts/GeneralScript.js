@@ -1,13 +1,20 @@
-//1)Local API
-const baseurl = "http://localhost:44338";
 
-//2) Mock API
-//const baseurl = "https://festivalapplication20211001092547.azurewebsites.net";
+//1)Local URL
+//const actualurl = "localhost:44338";
 
-//!!IMPORTANT!!: Use only API 1 or 2!
+//2) Proefaccount URL
+const actualurl = "festivalapplication20211001092547.azurewebsites.net";
+
+
+//3) Private Account URL
+//const actualurl = "festivalbackend.azurewebsites.net";
+
+const baseurl = "https://"+actualurl;
+
+//!!IMPORTANT!!: Use only API 1,2 or 3!
 
 function GoToHome() {
-
+    
     window.location.href = 'Index.html';
 }
 
@@ -100,7 +107,6 @@ function Register() {
         })
 }
 
-var StageID;
 
 function UpdateActivity(StageID) {
     update = {}
@@ -139,11 +145,47 @@ function UpdateActivity(StageID) {
         });
 }
 
+function UpdateActivityLogout(StageID) {
+    update = {}
+    update.stageID = StageID;
+    update.userID = localStorage.getItem('UserID');
+    console.log(update);
+    fetch(baseurl + "/api/UserActivity", {
+            method: "put",
+            headers: {
+                "Authorization": localStorage.getItem('AuthenticationKey'),
+                "accept": "text/plain",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(update)
+        })
+        .then(response => response.json())
+        .then(function (returndata) {
+            console.log(returndata);
+
+            if (returndata.success) {
+                if (StageID == 0) {
+                    localStorage.setItem('current-StageID', StageID);
+                    Logout();
+
+                } else {
+                    localStorage.setItem('current-StageID', StageID);
+                    GoToStage();
+                }
+            }
+            else{
+                ProcessErrors(returndata.errorMessage)
+            }
+        })
+        .catch(error => {
+            console.error("Error", error);
+        });
+}
+
 
 function Logout() {
     DeleteAuthenticationKey();
     localStorage.clear();
-    UpdateActivity(0);
     GoToHome();
 
 }
@@ -195,3 +237,4 @@ function DeleteAuthenticationKey() {
             console.log("Failed to send request");
         });
 }
+

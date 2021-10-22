@@ -12,18 +12,18 @@
     <link rel="stylesheet" href="styles.css">
     <script src="BootScripts/GeneralScript.js"></script>
     <script src="BootScripts/ChatSwitchScript.js"></script>
-    <script src="Bootscripts/PointsScript.js"></script>
+    <!-- <script src="Bootscripts/PointsScript.js"></script> -->
 </head>
 <!-- loads page when opened, and shows the info about all stages-->
 
-<body onload="GetInfo(), GetPoints()" class="d-flex flex-column min-vh-100">
+<body onload="GetInfo()" class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-sm fixed-top">
         <ul class="nav navbar-nav mr-auto">
             <!-- <li class="nav-item"><a class="nav-link" onclick="GoToHome();">Home <i class="bi bi-house"></i></a></li> -->
             <span class="navbar-text">Stages</span>
         </ul>
         <ul class="nav navbar-nav">
-            <span id="UserName" class="nav-UserName" class="nav-link"></span>
+            <span id="UserName" class="nav-UserName" class="nav-link"></span>  
             <li class="nav-item"><a class="nav-link" onclick="Logout();">Logout <i
                         class="bi bi-arrow-right-square"></i></a></li>
         </ul>
