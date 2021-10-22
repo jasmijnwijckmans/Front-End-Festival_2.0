@@ -373,6 +373,18 @@ stageSocket.onmessage = function (event) {
                     console.log(socketmessage)
                 }
                 break;
+            case "OnLoadTrack":
+                if (socketmessage.StageData.Success) {
+                    var currentTrackName = document.createElement("p");
+                    var currentTrackSource = document.createElement("p");
+                    currentTrackName.innerHTML = socketmessage.StageData.Data.TrackName;
+                    currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
+                    PlaySound(socketmessage.StageData.Data.TrackSource);
+                } else {
+                    alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    console.log(socketmessage)
+                }
+                break;
             case "ArtistGetList":
                 if (socketmessage.StageData.Success) {
                     console.log(socketmessage)
@@ -466,11 +478,12 @@ let currentSong;
 let timeaudio=0;
 
 function PlaySound(url) {
-    console.log(currentSong)
     if (currentSong == null) {
         currentSong = new Audio(url);
         currentSong.currentTime=timeaudio;
+        currentSong.muted=true;
         currentSong.play();
+        
     } else {
         currentSong.pause();
         currentSong = new Audio(url);
