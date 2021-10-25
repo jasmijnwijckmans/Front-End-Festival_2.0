@@ -1,5 +1,5 @@
 
-
+let websocketurl;
 if(actualurl=="localhost:44338")
 {
  websocketurl="ws://"+actualurl+"/ws/";
