@@ -1,9 +1,19 @@
-// Open a new websocket
-var webSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+
+let websocketurl;
+if(actualurl=="localhost:44338")
+{
+ websocketurl="ws://"+actualurl+"/ws/";
+}
+else
+{
+ websocketurl="wss://"+actualurl+"/ws/";
+}
+
+var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 
 // Manually open a new websocket
 function OpenSocket() {
-    webSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+    webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
 }
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -303,7 +313,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket(websocketurl+"stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -325,9 +335,10 @@ function SelectSong(TrackID, MusicListID) {
         //StageID: localStorage.getItem("current-StageID")
 
     };
-    console.log(msg)
+    
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
+    console.log(msg)
 }
 
 
@@ -363,6 +374,18 @@ stageSocket.onmessage = function (event) {
                     PlaySound(socketmessage.StageData.Data.TrackSource);
                     $("#song").empty();
                     $("#song").append("This song is currently playing: " + currentTrackName.innerHTML);
+                } else {
+                    alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    console.log(socketmessage)
+                }
+                break;
+            case "OnLoadTrack":
+                if (socketmessage.StageData.Success) {
+                    var currentTrackName = document.createElement("p");
+                    var currentTrackSource = document.createElement("p");
+                    currentTrackName.innerHTML = socketmessage.StageData.Data.TrackName;
+                    currentTrackSource.innerHTML = socketmessage.StageData.Data.TrackSource;
+                    PlaySound(socketmessage.StageData.Data.TrackSource);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
                     console.log(socketmessage)
@@ -461,11 +484,11 @@ let currentSong;
 let timeaudio=0;
 
 function PlaySound(url) {
-    console.log(currentSong)
     if (currentSong == null) {
         currentSong = new Audio(url);
         currentSong.currentTime=timeaudio;
         currentSong.play();
+        
     } else {
         currentSong.pause();
         currentSong = new Audio(url);

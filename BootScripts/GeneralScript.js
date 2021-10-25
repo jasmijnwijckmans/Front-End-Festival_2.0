@@ -1,11 +1,25 @@
-//1)Local API
-//const baseurl = "http://localhost:44338";
 
-//2) Mock API
-const baseurl = "https://festivalbackend.azurewebsites.net";
+//1)Local URL
+//const actualurl = "localhost:44338";
+
+//2) Proefaccount URL
+//const actualurl = "festivalapplication20211001092547.azurewebsites.net";
 
 
-//!!IMPORTANT!!: Use only API 1 or 2!
+//3) Private Account URL
+const actualurl = "festivalbackend.azurewebsites.net";
+
+
+if(actualurl=="localhost:44338")
+{
+    baseurl="http://"+actualurl;
+}
+else
+{
+    baseurl="https://"+actualurl;
+}
+
+//!!IMPORTANT!!: Use only API 1,2 or 3!
 
 function GoToHome() {
     
