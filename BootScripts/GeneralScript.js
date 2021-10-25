@@ -8,14 +8,14 @@ const actualurl = "localhost:44338";
 
 //3) Private Account URL
 //const actualurl = "festivalbackend.azurewebsites.net";
-let websocketurl;
+
 if(actualurl=="localhost:44338")
 {
- baseurl="http://"+actualurl;
+    baseurl="http://"+actualurl;
 }
 else
 {
- websocketurl="https://"+actualurl;
+    baseurl="https://"+actualurl;
 }
 
 //!!IMPORTANT!!: Use only API 1,2 or 3!
