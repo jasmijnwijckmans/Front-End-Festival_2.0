@@ -1,9 +1,9 @@
 // Open a new websocket
-var webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+var webSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
 
 // Manually open a new websocket
 function OpenSocket() {
-    webSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
+    webSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/" + localStorage.getItem("UserID"));
 }
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -303,7 +303,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket("wss://festivalapplication20211001092547.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket("wss://festivalbackend.azurewebsites.net/ws/stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
