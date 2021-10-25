@@ -323,7 +323,6 @@ stageSocket.onopen = function () {
         AuthenticationKey: localStorage.getItem('AuthenticationKey')
         //StageID: localStorage.getItem("current-StageID")
     }
-    console.log(JSON.stringify(msg))
     stageSocket.send(JSON.stringify(msg));
 }
 
@@ -338,16 +337,15 @@ function SelectSong(TrackID, MusicListID) {
     
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
-    console.log(msg)
 }
 
 
 stageSocket.onmessage = function (event) {
     //console.debug("WebSocket message received:", event);
-    //try {
-        console.log(event.data)
+    try {
+        //console.log(event.data)
         var socketmessage = JSON.parse(event.data);
-        console.log(socketmessage.StageCase)
+        //console.log(socketmessage.StageCase)
         switch (socketmessage.StageCase) {
             case "ArtistSelection":
                 if (socketmessage.StageData.Success) {
@@ -361,7 +359,7 @@ stageSocket.onmessage = function (event) {
                     $("#song").append("This song is currently playing: " + currentTrackName.innerHTML);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
-                    console.log(socketmessage)
+                    //console.log(socketmessage)
                 }
 
                 break;
@@ -376,7 +374,7 @@ stageSocket.onmessage = function (event) {
                     $("#song").append("This song is currently playing: " + currentTrackName.innerHTML);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
-                    console.log(socketmessage)
+                    //console.log(socketmessage)
                 }
                 break;
             case "OnLoadTrack":
@@ -388,15 +386,15 @@ stageSocket.onmessage = function (event) {
                     PlaySound(socketmessage.StageData.Data.TrackSource);
                 } else {
                     alert("Failed to load track list, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
-                    console.log(socketmessage)
+                    //console.log(socketmessage)
                 }
                 break;
             case "ArtistGetList":
                 if (socketmessage.StageData.Success) {
-                    console.log(socketmessage)
+                    //console.log(socketmessage)
                     $("#tracklists").empty();
                     socketmessage.StageData.Data.forEach(function (musiclist) {
-                        console.log(musiclist)
+                        //console.log(musiclist)
                         var List = document.createElement("div");
                         List.id = musiclist.ID;
                         $("#tracklists").append(List)
@@ -418,7 +416,7 @@ stageSocket.onmessage = function (event) {
                             } else {
 
                                 musiclist.PlaylistTracks.forEach(function (track) {
-                                    console.log(track)
+                                   // console.log(track)
 
                                     var divTrack = document.createElement("p");
                                     divTrack.id = track.Id;
@@ -437,15 +435,11 @@ stageSocket.onmessage = function (event) {
                                     length.innerHTML = track.Length;
 
                                     $("#" + musiclist.ID).append(name);
-                                    // name.onclick = function () {
-                                    //     PlaySound(track.TrackSource)
-                                    // }
+                                
                                     name.onclick = function () {
                                         SelectSong(track.Id, musiclist.ID)
                                     }
-                                    // $("#"+ musiclist.ID).append(source);
-                                    // $("#"+ musiclist.ID).append(length);
-
+                                
 
                                 });
 
@@ -470,12 +464,9 @@ stageSocket.onmessage = function (event) {
                 break;
 
         }
-    // } catch {
-    //     if (event.data == "Authorization passed, connection now open") {
-    //         document.getElementById("socketstatus").innerHTML = "DEBUG: SOCKET OPEN";
-    //     }
-    //     console.log(event.data);
-    // }
+    } catch {
+        console.log(event.data);
+    }
 }
 
 

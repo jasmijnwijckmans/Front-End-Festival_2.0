@@ -49,6 +49,9 @@ function GoToStage() {
 function GoToManageUsers() {
     window.location.href = "ManageUser.html";
 }
+function GoToManageMusic() {
+    window.location.href = "ManageMusic.html";
+}
 
 
 function Login() {
