@@ -1,5 +1,5 @@
 
-let websocketurl;
+
 if(actualurl=="localhost:44338")
 {
  websocketurl="ws://"+actualurl+"/ws/";
@@ -487,7 +487,6 @@ function PlaySound(url) {
     if (currentSong == null) {
         currentSong = new Audio(url);
         currentSong.currentTime=timeaudio;
-        currentSong.muted=true;
         currentSong.play();
         
     } else {
