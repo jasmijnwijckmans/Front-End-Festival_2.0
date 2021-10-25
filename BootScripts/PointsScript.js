@@ -1,5 +1,6 @@
 function GetPoints() {
     fetch(baseurl + "/api/Loyalty/" + localStorage.getItem("UserID"), {
+            method: "put",
             headers: {
                 "Authorization": localStorage.getItem('AuthenticationKey')
             }
@@ -9,7 +10,9 @@ function GetPoints() {
             console.log(returndata);
             if (returndata.success) {
                 username = returndata.data.userName;
-                points = returndata.data.userID;
+                console.log(username);
+                points = returndata.data.points;
+                console.log(points);
                 var x = username + "(" + points + ")";
                 document.getElementById("UserName").innerHTML = x
             } else {
