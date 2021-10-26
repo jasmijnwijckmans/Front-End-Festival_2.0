@@ -7,7 +7,7 @@ function GetUsers() {
         })
         .then((response) => response.json()) //What's the difference 
         .then(function (returndata) {
-            console.log(returndata);
+            //console.log(returndata);
             // if loading is correct, a card with data will be provided
             if (returndata.success) {
                 $("#myUsers").empty();
@@ -42,7 +42,7 @@ function GetUserData(userID) {
             })
             .then((response) => response.json()) //What's the difference 
             .then(function (returndata) {
-                console.log(returndata);
+                //console.log(returndata);
                 // if loading is correct, a card with data will be provided
                 if (returndata.success) {
                     $("#userActivity").empty();
@@ -97,7 +97,7 @@ function DeleteMessage(MessageID,UserID) {
         })
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+            //console.log(json);
             if (json.success) {
                 GetUserData(UserID);
 

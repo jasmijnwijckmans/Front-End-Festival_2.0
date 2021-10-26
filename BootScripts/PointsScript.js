@@ -7,12 +7,10 @@ function GetPoints() {
         })
         .then((response) => response.json())
         .then(function (returndata) {
-            console.log(returndata);
+            //console.log(returndata);
             if (returndata.success) {
                 username = returndata.data.userName;
-                console.log(username);
                 points = returndata.data.points;
-                console.log(points);
                 var x = username + "(" + points + ")";
                 document.getElementById("UserName").innerHTML = x
             } else {

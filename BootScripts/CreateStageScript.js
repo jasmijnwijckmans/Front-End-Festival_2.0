@@ -86,9 +86,11 @@ function GetStages() {
                     row += "<td style=\"text-align:left\">" + stage.stageName + "</td>";
                     row += "<td style=\"font-weight: lighter\">" + stage.currentSong + "</td>";
                     row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='numberOfUsers'>" + stage.numberOfUsers + "</div></td>";
+                    row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='genre'>" + stage.stageGenre + "</div></td>";
+                    row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='numberOfUsers'>" + stage.stageRestriction + "</div></td>";
                     if(stage.stageActive==true){
                     //row +=   "<td>  <input id='IDfield' type='text' placeholder='Enter stage ID'></td>";
-                    row += "<td style=\"font-weight: lighter\"> <label class='switch'> <input id = 'activeStageEdit'  onclick ='EditStage(" + stage.stageID + ","+ false + ")' type='checkbox' checked ><span class='slider round'></span></label></td>";
+                    row += "<td style=\"font-weight: lighter\"> <label class='switch'> <input id = 'activeStageEdit'  onclick ='EditStage(" + stage.stageID + ","+ false + ")' type='checkbox' checked ><span class='slider round'></span></label></td><br>";
 
                     }
                    else{

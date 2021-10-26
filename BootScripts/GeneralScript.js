@@ -105,7 +105,7 @@ function Register() {
         .then(json => {
             if (json.success) {
                 // if response is is true, log the returning user ID
-                console.log(json.data)
+                //console.log(json.data)
                 //create alert to notify if regiter was succesful to do!!!
                 alert("You have been registered succesfully!, click Login to proceed");
                 //GoToSwitch();
@@ -123,7 +123,7 @@ function UpdateActivity(StageID) {
     update = {}
     update.stageID = StageID;
     update.userID = localStorage.getItem('UserID');
-    console.log(update);
+    //console.log(update);
     fetch(baseurl + "/api/UserActivity", {
             method: "put",
             headers: {
@@ -135,7 +135,7 @@ function UpdateActivity(StageID) {
         })
         .then(response => response.json())
         .then(function (returndata) {
-            console.log(returndata);
+            //console.log(returndata);
 
             if (returndata.success) {
                 if (StageID == 0) {
@@ -160,7 +160,7 @@ function UpdateActivityLogout(StageID) {
     update = {}
     update.stageID = StageID;
     update.userID = localStorage.getItem('UserID');
-    console.log(update);
+    //console.log(update);
     fetch(baseurl + "/api/UserActivity", {
             method: "put",
             headers: {
@@ -172,7 +172,7 @@ function UpdateActivityLogout(StageID) {
         })
         .then(response => response.json())
         .then(function (returndata) {
-            console.log(returndata);
+            //console.log(returndata);
 
             if (returndata.success) {
                 if (StageID == 0) {

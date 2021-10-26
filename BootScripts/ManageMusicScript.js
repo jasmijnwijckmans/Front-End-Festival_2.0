@@ -7,13 +7,13 @@ function GetTracks() {
         })
         .then((response) => response.json()) //What's the difference 
         .then(function (returndata) {
-            console.log(returndata);
+           //console.log(returndata);
             // if loading is correct, a card with data will be provided
             if (returndata.success) {
                 $("#Tracks").empty();
                 var row = "";
                 returndata.data.forEach(function (track) {
-                    console.log(track)
+                    //console.log(track)
                     row += "<tr>";
                     row += "<td style = \" font-weight: bold\">" + track.trackID + "</td>";
                     row += "<td class = \"cursor-pointer\" style=\"font-weight: lighter\" >" + track.trackName + "</td>";
@@ -44,7 +44,7 @@ function DeleteTrack(TrackID) {
         })
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+            //console.log(json);
             if (json.success) {
                 GetTracks();
 
@@ -66,7 +66,7 @@ function EditTrack(TrackID) {
         myEdit.trackSource = document.getElementById("trackSource").value;
 
         //var myEdit = "{\"UserID\": " + document.getElementById("userID").value+ ",\"UserRole\": \"+ document.getElementById("userRole").value + \" }";
-        console.log(myEdit);
+        //console.log(myEdit);
         fetch(baseurl + "/api/Track", {
                 method: "put",
                 headers: {
@@ -78,9 +78,9 @@ function EditTrack(TrackID) {
             })
             .then(response => response.json())
             .then(json => {
-                console.log(json)
+                //console.log(json)
                 if (json.success) {
-                    console.log(json);
+                    //console.log(json);
                     GetTracks();
                 } else {
                     ProcessErrors(json.errorMessage)
@@ -103,7 +103,7 @@ function AddTrack() {
         newTrack.trackSource = document.getElementById("tracksourcefield").value;
         newTrack.trackGenre = document.getElementById("trackgenrefield").value;
     
-        console.log(newTrack);
+        //console.log(newTrack);
         fetch(baseurl + "/api/Track", {
             method: "post",
             headers: {
@@ -115,7 +115,7 @@ function AddTrack() {
         })
             .then(response => response.json())
             .then(json => {
-                console.log(json);
+                //console.log(json);
                 if (json.success) {
 
                     GetTracks();

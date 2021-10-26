@@ -1,12 +1,9 @@
 let websocketurl;
 
-if(actualurl=="localhost:44338")
-{
- websocketurl="ws://"+actualurl+"/ws/";
-}
-else
-{
- websocketurl="wss://"+actualurl+"/ws/";
+if (actualurl == "localhost:44338") {
+    websocketurl = "ws://" + actualurl + "/ws/";
+} else {
+    websocketurl = "wss://" + actualurl + "/ws/";
 }
 
 var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
@@ -277,7 +274,7 @@ function DeleteMessage(MessageID) {
         })
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+            //console.log(json);
             if (json.success) {
                 $("#" + MessageID).remove()
 
@@ -313,7 +310,7 @@ function LoadPage() {
 }
 
 // open a new stagesocket
-var stageSocket = new WebSocket(websocketurl+"stage/" + localStorage.getItem("current-StageID"));
+var stageSocket = new WebSocket(websocketurl + "stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
@@ -334,7 +331,7 @@ function SelectSong(TrackID, MusicListID) {
         //StageID: localStorage.getItem("current-StageID")
 
     };
-    
+
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
 }
@@ -389,6 +386,15 @@ stageSocket.onmessage = function (event) {
                     //console.log(socketmessage)
                 }
                 break;
+            case "UpdatedUserList":
+                if (socketmessage.StageData.Success) {
+                    GetActiveUsers(socketmessage)
+
+                } else {
+                    alert("Failed to load User List, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    //console.log(socketmessage)
+                }
+                break;
             case "ArtistGetList":
                 if (socketmessage.StageData.Success) {
                     //console.log(socketmessage)
@@ -416,7 +422,7 @@ stageSocket.onmessage = function (event) {
                             } else {
 
                                 musiclist.PlaylistTracks.forEach(function (track) {
-                                   // console.log(track)
+                                    // console.log(track)
 
                                     var divTrack = document.createElement("p");
                                     divTrack.id = track.Id;
@@ -435,11 +441,11 @@ stageSocket.onmessage = function (event) {
                                     length.innerHTML = track.Length;
 
                                     $("#" + musiclist.ID).append(name);
-                                
+
                                     name.onclick = function () {
                                         SelectSong(track.Id, musiclist.ID)
                                     }
-                                
+
 
                                 });
 
@@ -472,18 +478,18 @@ stageSocket.onmessage = function (event) {
 
 
 let currentSong;
-let timeaudio=0;
+let timeaudio = 0;
 
 function PlaySound(url) {
     if (currentSong == null) {
         currentSong = new Audio(url);
-        currentSong.currentTime=timeaudio;
+        currentSong.currentTime = timeaudio;
         currentSong.play();
-        
+
     } else {
         currentSong.pause();
         currentSong = new Audio(url);
-        currentSong.currentTime=timeaudio;
+        currentSong.currentTime = timeaudio;
         currentSong.play();
     }
 }
@@ -491,9 +497,33 @@ function PlaySound(url) {
 function StopSound() {
     currentSong.pause();
     timeaudio = currentSong.currentTime;
-    console.log(timeaudio);
+    //console.log(timeaudio);
 }
 
 function ResumeSound() {
     currentSong.play();
 }
+
+function GetActiveUsers(returndata) {
+
+
+            if (returndata.StageData.Success) 
+            {
+                var temp="<tr style>Active Users</tr><br>";
+                var activeusers=returndata.StageData.Data;
+                activeusers.forEach(function(activeuser)
+                {
+                    temp += "<tr>";
+                    temp += "<td style ='font-weight: bold'><span class='logged-in'>●</span>" + activeuser.UserName + "<br></td>";
+                    temp += "</tr>";
+                })
+                document.getElementById("userlist").innerHTML = temp;
+            }
+}
+
+$(document).keypress(function(event){
+
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        $("#NewMessageBtn").click();
+    }});
