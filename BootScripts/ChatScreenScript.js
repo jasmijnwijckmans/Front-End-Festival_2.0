@@ -6,21 +6,10 @@ if (actualurl == "localhost:44338") {
     websocketurl = "wss://" + actualurl + "/ws/";
 }
 
-var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
+
 
 // Manually open a new websocket
-function OpenSocket() {
-    webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
-}
 
-// OnOpen change a field in the html page to indicate that the socket is open
-webSocket.onopen = function () {
-    //Send the authentication key in a JSON object as the first message
-    var msg = {
-        AuthenticationKey: localStorage.getItem('AuthenticationKey'),
-    };
-    webSocket.send(JSON.stringify(msg));
-}
 
 // Listen for incoming messages
 webSocket.onmessage = function (event) {
@@ -305,44 +294,64 @@ function LoadPage() {
         $("#chat").removeClass("col-sm-8").addClass("col-sm-12")
         $("#DjBooth").hide();
     }
+    let websocketurl;
+
+    if (actualurl == "localhost:44338") {
+    websocketurl = "ws://" + actualurl + "/ws/";
+    } else {
+    websocketurl = "wss://" + actualurl + "/ws/";
+    }
+
+    var webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
+
+    var stageSocket = new WebSocket(websocketurl + "stage/" + localStorage.getItem("current-StageID"));
+    function OpenSocket() {
+        webSocket = new WebSocket(websocketurl + localStorage.getItem("UserID"));
+    }
+    
+    // OnOpen change a field in the html page to indicate that the socket is open
+    webSocket.onopen = function () {
+        //Send the authentication key in a JSON object as the first message
+        var msg = {
+            AuthenticationKey: localStorage.getItem('AuthenticationKey'),
+        };
+        webSocket.send(JSON.stringify(msg));
+    }
+    stageSocket.onopen = function () {
+        //Send the authentication key in a JSON object as the first message
+        var msg = {
+            AuthenticationKey: localStorage.getItem('AuthenticationKey')
+    
+        }
+        stageSocket.send(JSON.stringify(msg));
+    }
 
 
 }
-
-// open a new stagesocket
-var stageSocket = new WebSocket(websocketurl + "stage/" + localStorage.getItem("current-StageID"));
 
 
 // OnOpen change a field in the html page to indicate that the socket is open
-stageSocket.onopen = function () {
-    //Send the authentication key in a JSON object as the first message
-    var msg = {
-        AuthenticationKey: localStorage.getItem('AuthenticationKey')
-        //StageID: localStorage.getItem("current-StageID")
-    }
-    stageSocket.send(JSON.stringify(msg));
-}
+
 
 function SelectSong(TrackID, MusicListID) {
     // Create an object with the required parameters
+    
     var msg = {
+        ReceivedCase:"SongSelection",
         TrackID: TrackID,
         PlaylistID: MusicListID,
-        //StageID: localStorage.getItem("current-StageID")
-
+        SongTime:0
     };
-
     // Send the object as a string through the websocket
     stageSocket.send(JSON.stringify(msg));
 }
 
 
 stageSocket.onmessage = function (event) {
-    //console.debug("WebSocket message received:", event);
     try {
         //console.log(event.data)
         var socketmessage = JSON.parse(event.data);
-        //console.log(socketmessage.StageCase)
+        console.log(socketmessage)
         switch (socketmessage.StageCase) {
             case "ArtistSelection":
                 if (socketmessage.StageData.Success) {
@@ -395,6 +404,24 @@ stageSocket.onmessage = function (event) {
                     //console.log(socketmessage)
                 }
                 break;
+            case "SongPause":
+                if (socketmessage.StageData.Success) {
+                    StopSound()
+
+                } else {
+                    alert("Failed to load User List, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    //console.log(socketmessage)
+                }
+                break;
+            case "SongResume":
+                if (socketmessage.StageData.Success) {
+                    ResumeSound(socketmessage.StageData.Data.SongTime)
+
+                } else {
+                    alert("Failed to load User List, error code(s): " + socketmessage.StageData.ErrorMessage.toString())
+                    //console.log(socketmessage)
+                }
+                 break;
             case "ArtistGetList":
                 if (socketmessage.StageData.Success) {
                     //console.log(socketmessage)
@@ -494,13 +521,32 @@ function PlaySound(url) {
     }
 }
 
+function PauseSoundCall(){
+    var msg = {
+        ReceivedCase:"SongPause",
+    };
+    // Send the object as a string through the websocket
+    console.log(msg);
+    stageSocket.send(JSON.stringify(msg));
+}
 function StopSound() {
     currentSong.pause();
+
+}
+function ResumeSoundCall(){
     timeaudio = currentSong.currentTime;
-    //console.log(timeaudio);
+    var msg = {
+        ReceivedCase:"SongResume",
+        SongTime:timeaudio
+    };
+    console.log(msg);
+        // Send the object as a string through the websocket
+    stageSocket.send(JSON.stringify(msg));
 }
 
-function ResumeSound() {
+function ResumeSound(songTime) {
+
+    currentSong.currentTime=songTime;
     currentSong.play();
 }
 
@@ -527,3 +573,10 @@ $(document).keypress(function(event){
     if(keycode == '13'){
         $("#NewMessageBtn").click();
     }});
+
+function Enter(){
+    document.getElementById("splashscreen").style="display:none";
+    document.getElementById("chatscreenbody").style="display:run-in";
+    LoadPage();
+
+}    
