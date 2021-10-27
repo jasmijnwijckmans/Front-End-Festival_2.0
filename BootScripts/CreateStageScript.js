@@ -36,7 +36,6 @@ function EditStage(StageID, Status) {
         var myEdit = {}
         myEdit.stageID = StageID;
         myEdit.stageActive = Status;
-        console.log(myEdit);
         fetch(baseurl + "/api/Stage", {
             method: "put",
             headers: {
