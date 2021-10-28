@@ -79,8 +79,7 @@ function Login() {
                 localStorage.setItem('UserRole', json.data.userRole);
                 GoToSwitch();
             } else {
-                ProcessErrors(json.errorMessage)
-                document.getElementById("ErrorMessage").innerHTML = json.responseMessage[0];
+                ProcessErrors(json.errorMessage);
             }
         })
 }
@@ -192,6 +191,42 @@ function UpdateActivityLogout(StageID) {
             console.error("Error", error);
         });
 }
+function UpdateActivityClose() {
+    update = {}
+    update.stageID = 0;
+    update.userID = localStorage.getItem('UserID');
+    //console.log(update);
+    fetch(baseurl + "/api/UserActivity", {
+            method: "put",
+            headers: {
+                "Authorization": localStorage.getItem('AuthenticationKey'),
+                "accept": "text/plain",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(update)
+        })
+        .then(response => response.json())
+        .then(function (returndata) {
+            //console.log(returndata);
+
+            if (returndata.success) {
+                if (StageID == 0) {
+                    localStorage.setItem('current-StageID', StageID);
+
+
+                } else {
+                    localStorage.setItem('current-StageID', StageID);
+
+                }
+            }
+            else{
+                ProcessErrors(returndata.errorMessage)
+            }
+        })
+        .catch(error => {
+            console.error("Error", error);
+        });
+}
 
 
 function Logout() {
@@ -201,31 +236,6 @@ function Logout() {
 
 }
 
-function ProcessErrors(errorCodes) {
-    if (errorCodes != null) {
-        //var AlertMessage = " this errorcode:" + errorCodes;
-        //alert(AlertMessage)
-
-        if (errorCodes.includes(1)) {
-            alert("Server Error, try again later");
-        }
-
-        if (errorCodes.includes(2)) {
-            alert("This request cannot be taken into account");
-        }
-        if (errorCodes.includes(3)) {
-            alert("You do not have acces to enter this resource");
-            Logout()
-        }
-        if (errorCodes.includes(4)) {
-            alert("The data you provided is not correct, try again");
-        }
-        if (errorCodes.includes(5)) {
-            alert("you're not a validated user, proceed to login");
-            Logout()
-        }
-    }
-}
 
 
 function DeleteAuthenticationKey() {
@@ -241,7 +251,7 @@ function DeleteAuthenticationKey() {
         .then(json => {
             if (json.success == false) {
                 //when errorcodes get this error.
-                ProcessErrors(json.errorMessage)
+                ProcessErrors(json.errorMessage);
             }
         })
         .catch(error => {
@@ -249,3 +259,68 @@ function DeleteAuthenticationKey() {
         });
 }
 
+function ProcessErrors(errorCodes) {
+    if (errorCodes != null) {
+        //var AlertMessage = " this errorcode:" + errorCodes;
+        //alert(AlertMessage)
+
+        if (errorCodes.includes(1)) {
+            showerror(1);
+        }
+
+        if (errorCodes.includes(2)) {
+            showerror(2);
+        }
+        if (errorCodes.includes(3)) {
+            showerror(3);
+
+        }
+        if (errorCodes.includes(4)) {
+            showerror(4);
+        }
+        if (errorCodes.includes(5)) {
+            showerror(5);
+        }
+    }
+    function showerror(errorCodes){
+
+        var alertmsg = ""
+        document.getElementById("alertwindow").classList="alert alert-danger alert-dismissible fade show";
+        document.getElementById("alertwindow").style="block";
+        alertmsg += "<strong>Error!</strong>"
+        switch(errorCodes){
+            case 1:
+                alertmsg+="  Server Error: please try again later"
+                alertmsg+="<button type='button' class='btn-close' data-bs-dismiss='alert'></button>"
+                break;
+            case 2:
+                alertmsg+="  Request Error: Request can not be processed"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert()'></button>"
+                break;
+            case 3:
+                alertmsg+="  Unauthorized Access: please log in again"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert();Logout()'></button>"
+                break;
+            case 4:
+                alertmsg+="  Data Error: Please check your data"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert()'></button>"
+                break;
+            case 5:
+                alertmsg+="  Authentication Error: please log in again"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert();Logout()'></button>"
+                break;
+            default:
+                alertmsg+="  Unexpected Error: please contact system admin"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert()'></button>"
+                break;
+        }
+        document.getElementById("alertwindow").innerHTML = alertmsg;
+    }
+
+}
+function CloseAlert(){
+    document.getElementById("alertwindow").classList="";
+    document.getElementById("alertwindow").innerHTML = "";
+    document.getElementById("alertwindow").style="none";
+
+}

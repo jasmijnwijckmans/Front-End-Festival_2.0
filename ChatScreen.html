@@ -20,7 +20,7 @@
     <script src="Bootscripts/PointsScript.js"></script>
 </head>
 
-<body onload="GetPoints()" class="d-flex flex-column min-vh-100 picture">
+<body onload="GetPoints()" class="d-flex flex-column min-vh-100 picture" onunload="UpdateActivityClose(0)">
     <!-- page header -->
     <!-- navigation bar -->
     <nav class="navbar navbar-expand-sm fixed-top">
@@ -37,18 +37,20 @@
                         class="bi bi-box-arrow-right"></i></a></li>
         </ul>
     </nav>
+    <div id="alertwindow"></div>
     <!-- main body -->
     <p id="socketstatus" style="color: red;"></p>
 
     <div  id="splashscreen" class="col-sm-12 col-lg-12">
         <div class='card w-100 h-100'>
             <img class='card-img-top' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIM3la9vbgy48Y6C_mJHPnQu_CRp1EvjnIfw&usqp=CAU' alt='Card image cap'>
-            <div class= 'card-title'> You are about to enter the Stage</div><a><button class='btn' value='Enter'  onclick='Enter()'> Enter<i class=''></i></button></a></div>
+            <div class= 'card-title'> Click enter the Stage</div><a><button class='btn' value='Enter'  onclick='Enter()'> Enter<i class=''></i></button></a></div>
         </div>
 
     </div>
     <div id="chatscreenbody" style='display:none'>
         <div class="container-fluid " style="margin-top:80px;">
+            <div id="alertwindow"></div>
             <div class="row">
                 <div class="col-sm-2" id="activeusers">
                     <div class="container">
