@@ -560,6 +560,9 @@ function Enter() {
     document.getElementById("splashscreen").style = "display:none";
     document.getElementById("chatscreenbody").style = "display:run-in";
     LoadPage();
-    currentSong.play();
+    if (currentSong!=null){
+        currentSong.play();
+    }
+    
 
 }
