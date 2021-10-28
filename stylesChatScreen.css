@@ -30,3 +30,10 @@
   .dropdown-toggle{
     text-align:center;
   }
+  .djbooth{
+    border: 2px solid #dedede;
+    background-color: thistle;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 15px;
+  }

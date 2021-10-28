@@ -19,7 +19,7 @@ function GetTracks() {
                     row += "<tr>";
                     row += "<td style = \" font-weight: bold\">" + track.trackID + "</td>";
                     row += "<td class = \"cursor-pointer\" style=\"font-weight: lighter\">" + track.trackName + "</td>";
-                    //row += "<td style=\"font-weight: lighter\">" + track.trackSource + "</td>";
+                    row += "<td style=\"font-weight: lighter\">" + track.playing + "</td>";
                     row += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteTrack(" + track.trackID + ")'> Delete</button></td>";
                 
 
@@ -50,7 +50,8 @@ function DeleteTrack(TrackID) {
             if (json.success) {
             GetTracks();
             } else {
-                ProcessErrors(json.ErrorMessageS)
+                console.log(json)
+                ProcessErrors(json.errorMessage)
 
             }
         })
@@ -214,7 +215,7 @@ function GetMusicLists() {
                     trackposition.type = "number";
     
               
-                    $("#" + musiclist.id).append(trackposition);
+                    //$("#" + musiclist.id).append(trackposition);
                    
                     $("#" + musiclist.id).append(space1);
 
@@ -226,7 +227,7 @@ function GetMusicLists() {
                     $("#" + musiclist.id).append(addTrackList);
                    
                     addTrackList.onclick = function () {
-                        AddTrackToList(musiclist.id, parseInt(document.getElementById(musiclist.id + "trackidfield").value), parseInt(document.getElementById(musiclist.id +"trackpositionfield").value))
+                        AddTrackToList(musiclist.id, parseInt(document.getElementById(musiclist.id + "trackidfield").value))
 
                      
                     }
@@ -314,14 +315,14 @@ function AddMusicList() {
     }
 }
 
-function AddTrackToList(MusicListID, TrackID, TrackPosition) {
+function AddTrackToList(MusicListID, TrackID) {
 
         //console.log(MusicListID)
         var addTrack = {}
         addTrack.playListId = MusicListID;
         var array = {}
         array.trackID = TrackID;
-        array.trackPosition = TrackPosition;
+        array.trackPosition = 1;
 
         addTrack.trackPositionArray = [array];
         

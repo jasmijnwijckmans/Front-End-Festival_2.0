@@ -465,7 +465,7 @@ function LoadPage() {
         //if user is an artist DJ booth appears on the page
         $("#DjBooth").show();
     } else {
-        $("#chat").removeClass("col-sm-8").addClass("col-sm-12")
+        $("#chat").removeClass("col-sm-7").addClass("col-sm-10")
         $("#DjBooth").hide();
     }
    

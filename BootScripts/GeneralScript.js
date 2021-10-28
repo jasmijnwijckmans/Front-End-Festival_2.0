@@ -301,8 +301,8 @@ function ProcessErrors(errorCodes) {
                 alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert()'></button>"
                 break;
             case 3:
-                alertmsg+="  Unauthorized Access: please log in again"
-                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert();Logout()'></button>"
+                alertmsg+="  Invalid Operation: please see if what you are trying to do is possible"
+                alertmsg+="<button type=\"button\" class=\"btn-close\" onclick='CloseAlert()'></button>"
                 break;
             case 4:
                 alertmsg+="  Data Error: Please check your data"

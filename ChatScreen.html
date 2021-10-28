@@ -41,25 +41,31 @@
     <!-- main body -->
     <p id="socketstatus" style="color: red;"></p>
 
-    <div  id="splashscreen" class="col-sm-12 col-lg-12">
+    <div id="splashscreen" class="col-sm-12- col-lg12" style="margin-top:80px;">
         <div class='card w-100 h-100'>
-            <img class='card-img-top' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIM3la9vbgy48Y6C_mJHPnQu_CRp1EvjnIfw&usqp=CAU' alt='Card image cap'>
-            <div class= 'card-title'> Click enter the Stage</div><a><button class='btn' value='Enter'  onclick='Enter()'> Enter<i class=''></i></button></a></div>
-        </div>
+            <!-- <img class='card-img-top' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIM3la9vbgy48Y6C_mJHPnQu_CRp1EvjnIfw&usqp=CAU' alt='Card image cap'> -->
+            <div class='card-title'> Click enter the Stage
 
+            </div>
+            <a><button class='btn' value='Enter' onclick='Enter()'>Enter<i class=''></i></button></a>
+        </div>
     </div>
+
     <div id="chatscreenbody" style='display:none'>
         <div class="container-fluid " style="margin-top:80px;">
             <div id="alertwindow"></div>
             <div class="row">
+
+
                 <div class="col-sm-2" id="activeusers">
-                    <div class="container">
-                        <div class="usercard">
+                    <div class="container djbooth">
+                        <div>
                             <div id="userlist">
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-sm-7" id="chat">
                     <!-- Chat Area -->
                     <div class="container">
@@ -83,8 +89,8 @@
                             <div class="col-sm-1">
                                 <a><button style="margin:2px" class="btn" type="button" id="NewMessageBtn"
                                         value="Send Message"
-                                        onclick="SendMessage();document.getElementById('SendField').value=''">Send <i
-                                            class=""></i></button></a>
+                                        onclick="SendMessage();document.getElementById('SendField').value=''">Send
+                                        <i class=""></i></button></a>
                                 <div id="MessageSending" class="spinner-border spinner-border-sm" hidden></div>
                             </div>
                         </div>
@@ -93,9 +99,9 @@
                 <!-- Dj Booth from artist -->
                 <div class="col-sm-3" id="DjBooth">
                     <div class="container">
-                        <div class="row">
+                        <div class="row djbooth">
                             <div class="col-sm-12">
-                                <h1 class="font-weight-bold" style="color:lightgoldenrodyellow"> DJ Booth</h1>
+                                <h1 class="font-weight-bold" style="color: black"> DJ Booth</h1>
                             </div>
                             <div id="song">
                             </div>
@@ -103,18 +109,16 @@
                                 <!-- <button type="button" class=" btn bi bi-skip-backward" onclick="SwitchSong()"> </button> -->
                                 <button type="button" class="btn bi bi-play" onclick="ResumeSoundCall()"> </button>
                                 <button type="button" class="btn bi bi-pause" onclick="PauseSoundCall()"> </button>
+                                <button type="button" class="btn p-2" onclick="GoToManageMusic()"> Manage Music
+                                </button>
                                 <!-- <button type="button" class="btn bi bi-skip-forward" onclick="SwitchSong()"> </button> -->
                             </div>
                             <div id="tracklists">
                             </div>
-                            <div id="ManageMusic">
-                                <button type="button" class="btn" onclick="GoToManageMusic()"> Manage Music </button>
-                            </div>
+
                         </div>
 
-                        <div class ="p-2">   
-                            <button type="button" class="btn" onclick="GoToManageMusic()"> Manage Music </button>
-                        </div>
+
 
                     </div>
                 </div>
@@ -122,6 +126,7 @@
             <div id="interaction">
 
             </div>
+
         </div>
     </div>
     <!-- foot bar -->
