@@ -103,11 +103,14 @@ function Register() {
         .then(response => response.json())
         .then(json => {
             if (json.success) {
-                // if response is is true, log the returning user ID
-                //console.log(json.data)
-                //create alert to notify if regiter was succesful to do!!!
-                alert("You have been registered succesfully!, click Login to proceed");
-                //GoToSwitch();
+                var alertmsg = ""
+                document.getElementById("alertwindow").classList="alert alert-success alert-dismissible fade show";
+                document.getElementById("alertwindow").style="block";
+                alertmsg += "<strong>Success!</strong>"                
+                alertmsg+="  You have been registered successfully, please proceed to log in"
+                alertmsg+="<button type='button' class='btn-close' onclick='CloseAlert()' data-bs-dismiss='alert'></button>"
+                document.getElementById("alertwindow").innerHTML = alertmsg;
+                       
             } else {
                 // errormessage
                 ProcessErrors(json.errorMessage)
@@ -291,7 +294,7 @@ function ProcessErrors(errorCodes) {
         switch(errorCodes){
             case 1:
                 alertmsg+="  Server Error: please try again later"
-                alertmsg+="<button type='button' class='btn-close' data-bs-dismiss='alert'></button>"
+                alertmsg+="<button type='button' class='btn-close' onclick='CloseAlert()' data-bs-dismiss='alert'></button>"
                 break;
             case 2:
                 alertmsg+="  Request Error: Request can not be processed"
