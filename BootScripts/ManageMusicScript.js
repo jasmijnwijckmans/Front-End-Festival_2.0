@@ -10,16 +10,17 @@ function GetTracks() {
  
             // if loading is correct, a card with data will be provided
             if (returndata.success) {
-                $('#ModalTracks').modal('show');
+
                 $("#tracks").empty();
-                console.log(returndata);
+                //console.log(returndata);
                 var row = ""
                 returndata.data.forEach(function (track) {
-                    console.log(track)
+                    //console.log(track)
                     row += "<tr>";
                     row += "<td style = \" font-weight: bold\">" + track.trackID + "</td>";
-                    row += "<td class = \"cursor-pointer\" style=\"font-weight: lighter;color:blue\">" + track.trackName + "</td>";
-                    row += "<td style=\"font-weight: lighter\">" + track.trackSource + "</td>";
+                    row += "<td class = \"cursor-pointer\" style=\"font-weight: lighter\">" + track.trackName + "</td>";
+                    //row += "<td style=\"font-weight: lighter\">" + track.trackSource + "</td>";
+                    row += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteTrack(" + track.trackID + ")'> Delete</button></td>";
                 
 
                 });
@@ -47,8 +48,7 @@ function DeleteTrack(TrackID) {
         .then(json => {
             //console.log(json);
             if (json.success) {
-                GetTracks();
-
+            GetTracks();
             } else {
                 ProcessErrors(json.ErrorMessageS)
 
@@ -118,9 +118,10 @@ function AddTrack() {
             .then(json => {
                 //console.log(json);
                 if (json.success) {
-
-                   
-
+                    alert("Track is succesfully added to the track list");
+                    document.getElementById('tracknamefield').value=null;
+                    document.getElementById('tracksourcefield').value=null;
+                    
                 } else {
                     ProcessErrors(json.errorMessage)
                 }
@@ -146,7 +147,7 @@ function GetMusicLists() {
             // if loading is correct, a card with data will be provided
             if (returndata.success) {
                 $("#MusicList").empty();
-                var music = document.createElement("div");
+                var music = document.createElement("h2");
                 music.className = "font-weight-bold"
                 music.innerHTML = "MusicLists"
                 $("#MusicList").append(music)
@@ -265,6 +266,7 @@ function DeleteMusicList(MusicListID) {
         .then(json => {
             //console.log(json);
             if (json.success) {
+               
                 GetMusicLists();
 
             } else {
@@ -297,6 +299,7 @@ function AddMusicList() {
                 if (json.success) {
 
                     GetMusicLists();
+                    document.getElementById('listnamefield').value=null;
 
                 } else {
                     ProcessErrors(json.errorMessage)
@@ -313,7 +316,7 @@ function AddMusicList() {
 
 function AddTrackToList(MusicListID, TrackID, TrackPosition) {
 
-        console.log(MusicListID)
+        //console.log(MusicListID)
         var addTrack = {}
         addTrack.playListId = MusicListID;
         var array = {}
@@ -322,7 +325,7 @@ function AddTrackToList(MusicListID, TrackID, TrackPosition) {
 
         addTrack.trackPositionArray = [array];
         
-        console.log(JSON.stringify(addTrack))
+        //console.log(JSON.stringify(addTrack))
 
         fetch(baseurl + "/api/Playlist", {
             method: "put",
@@ -335,7 +338,7 @@ function AddTrackToList(MusicListID, TrackID, TrackPosition) {
         })
             .then(response => response.json())
             .then(json => {
-                console.log(json);
+                //console.log(json);
                 if (json.success) {
 
                     GetMusicLists();
