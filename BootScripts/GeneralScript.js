@@ -1,9 +1,9 @@
 
 //1)Local URL
-//const actualurl = "localhost:44338";
+const actualurl = "localhost:44338";
 
 //2) Proefaccount URL
-const actualurl = "festivalapplication20211001092547.azurewebsites.net";
+//const actualurl = "festivalapplication20211001092547.azurewebsites.net";
 
 
 //3) Private Account URL
