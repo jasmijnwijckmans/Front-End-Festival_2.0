@@ -49,6 +49,7 @@ function DeleteTrack(TrackID) {
             //console.log(json);
             if (json.success) {
             GetTracks();
+            GetMusicLists(); 
             } else {
                 console.log(json)
                 ProcessErrors(json.errorMessage)
@@ -119,7 +120,7 @@ function AddTrack() {
             .then(json => {
                 //console.log(json);
                 if (json.success) {
-                    alert("Track is succesfully added to the track list");
+                    GetTracks();
                     document.getElementById('tracknamefield').value=null;
                     document.getElementById('tracksourcefield').value=null;
                     
