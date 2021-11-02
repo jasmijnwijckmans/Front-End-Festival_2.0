@@ -75,7 +75,7 @@ function GetStages() {
         })
         .then((response) => response.json()) //What's the difference 
         .then(function (returndata) {
-            console.log(returndata);
+            //console.log(returndata);
             // if loading is correct, a card with data will be provided
             $("#myStages").empty();
             if (returndata.success) {
