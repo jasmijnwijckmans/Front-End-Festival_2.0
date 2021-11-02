@@ -130,7 +130,18 @@ function DeleteStage(stageID) {
 
                 } else {
                     if (json.data == "Stage is still Active") {
-                        alert("Stage is still active, please set stage to inactive");
+                        var alertmsg = ""
+                        document.getElementById("alertwindow").classList = "alert alert-danger alert-dismissible fade show";
+                        document.getElementById("alertwindow").style = "block";
+                        alertmsg += "<strong>Error!</strong>"
+
+                        alertmsg += "Stage is still active: Set stage to inactive before deleting"
+                        alertmsg += "<button type='button' class='btn-close' onclick='CloseAlert()' data-bs-dismiss='alert'></button>"
+
+
+
+                        document.getElementById("alertwindow").innerHTML = alertmsg;
+
                     } else {
                         ProcessErrors(json.errorMessage)
                     }
