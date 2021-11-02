@@ -7,7 +7,7 @@ const actualurl = "localhost:44338";
 
 
 //3) Private Account URL
-//const actualurl = "blue-grass-0499bf603.azurestaticapps.net";
+//const actualurl = "festivalchatbackend.azurewebsites.net";
 
 
 if(actualurl=="localhost:44338")
