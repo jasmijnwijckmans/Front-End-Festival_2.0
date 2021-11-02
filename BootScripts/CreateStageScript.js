@@ -1,7 +1,7 @@
 function CreateStage() {
     if (localStorage.getItem('UserRole') == "admin") {
         var myJSON = "{\"stageName\": \"" + document.getElementById("stagenamefield").value + "\",\"stageActive\":" + $('#activeStage').is(':checked') + ",\"stageGenre\": \"" + document.getElementById("stagegenrefield").value + "\",\"stageRestriction\": \"" + document.getElementById("stagerestrictionfield").value + "\"}"
-        console.log(myJSON);
+        //console.log(myJSON);
         fetch(baseurl + "/api/Stage", {
                 method: "post",
                 headers: {
@@ -26,7 +26,7 @@ function CreateStage() {
                 }
             })
             .catch(error => {
-                console.log("catch error");
+                //console.log("catch error");
                 ProcessErrors(json.errorMessage)
             });
     } else {
@@ -39,6 +39,7 @@ function EditStage(StageID, Status) {
         var myEdit = {}
         myEdit.stageID = StageID;
         myEdit.stageActive = Status;
+        myEdit.stageRestriction = document.getElementById("stagerestrictionfield"+StageID).value
         fetch(baseurl + "/api/Stage", {
                 method: "put",
                 headers: {
@@ -50,7 +51,7 @@ function EditStage(StageID, Status) {
             })
             .then(response => response.json())
             .then(json => {
-                console.log(json);
+               // console.log(json);
                 if (json.success) {
                     GetStages();
                 } else {
@@ -87,7 +88,17 @@ function GetStages() {
                     row += "<td style=\"font-weight: lighter\">" + stage.currentSong + "</td>";
                     row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='numberOfUsers'>" + stage.numberOfUsers + "</div></td>";
                     row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='genre'>" + stage.stageGenre + "</div></td>";
-                    row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='numberOfUsers'>" + stage.stageRestriction + "</div></td>";
+                   // row += "<td class = \"text-center\" style=\"font-weight: lighter\"> <div id ='numberOfUsers'>" + stage.stageRestriction + "</div></td>";
+                    row += "<td><select id='stagerestrictionfield"+stage.stageID+"'>"
+                    if (stage.stageRestriction== "artist") {
+                        row += "<option value ='none'> Everyone </option><option selected value = 'artist' >Artists</option><option value='admin'>Admins</option>";
+                    } else if (stage.stageRestriction== "admin"){
+                        row += "<option value ='none'> Everyone </option><option value = 'artist' >Artists</option><option selected value='admin'>Admins</option>";
+                    }
+                    else{
+                        row += "<option selected value ='none'> Everyone </option><option value = 'artist' >Artists</option><option value='admin'>Admins</option>";
+                    }
+                    row +="</select></td>"
                     if (stage.stageActive == true) {
                         //row +=   "<td>  <input id='IDfield' type='text' placeholder='Enter stage ID'></td>";
                         row += "<td style=\"font-weight: lighter\"> <label class='switch'> <input id = 'activeStageEdit'  onclick ='EditStage(" + stage.stageID + "," + false + ")' type='checkbox' checked ><span class='slider round'></span></label></td><br>";
@@ -96,8 +107,9 @@ function GetStages() {
                         //row +=   "<td>  <input id='IDfield' type='text' placeholder='Enter stage ID'></td>";
                         row += "<td style=\"font-weight: lighter\"> <label class='switch'> <input id = 'activeStageEdit'  onclick ='EditStage(" + stage.stageID + "," + true + ")' type='checkbox'><span class='slider round'></span></label></td>";
                     }
+                    row += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='EditStage(" + stage.stageID + "," + stage.stageActive + ")'> Edit</button></td>";
                     row += "<td style=\"font-weight: lighter\"> <button class='btn' onclick='DeleteStage(" + stage.stageID + ")'> Delete</button></td>";
-
+                  
 
 
                 });
